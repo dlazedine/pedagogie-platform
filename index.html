@@ -3493,7 +3493,57 @@ setTimeout(function() {
         console.log('   📊 السجلات: ' + (typeof traitementData !== 'undefined' ? traitementData.length : 0));
     }
 }, 100);
-    
+    // ============================================================
+//  إعادة ربط التبويبات (حل احتياطي)
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const tabs = document.querySelectorAll('.nav-tab');
+        console.log('🔧 عدد التبويبات:', tabs.length);
+        
+        tabs.forEach(tab => {
+            // إزالة المستمعين القدامى
+            const newTab = tab.cloneNode(true);
+            tab.parentNode.replaceChild(newTab, tab);
+        });
+        
+        // إعادة الربط
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetTab = this.dataset.tab;
+                if (!targetTab) return;
+                
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                const target = document.getElementById('tab-' + targetTab);
+                if (target) target.classList.add('active');
+                
+                // استدعاء الدوال الخاصة بكل تبويب
+                switch(targetTab) {
+                    case 'models': if (typeof renderModels === 'function') renderModels(); break;
+                    case 'bank': 
+                        if (typeof renderBank === 'function') renderBank();
+                        if (typeof populateExerciceSelect === 'function') populateExerciceSelect();
+                        if (typeof renderExercices === 'function') renderExercices();
+                        break;
+                    case 'learner':
+                        if (typeof initializeQuizBuilder === 'function') initializeQuizBuilder();
+                        break;
+                    case 'users':
+                        if (typeof renderUsersList === 'function') renderUsersList();
+                        break;
+                    case 'settings':
+                        if (typeof renderColorSettings === 'function') renderColorSettings();
+                        break;
+                }
+            });
+        });
+        
+        console.log('✅ تم ربط التبويبات بنجاح');
+    }, 1000);
+});
     console.log(`✅ منصة المعالجة البيداغوجية v${APP_VERSION} جاهزة`);
 });
 
