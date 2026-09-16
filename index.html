@@ -2052,6 +2052,140 @@
                 <div class="stat-card"><div class="number" id="statPending">0</div><div class="label">معايير تنتظر المعالجة</div></div>
             </div>
             <div class="alert alert-info"><i class="fas fa-info-circle"></i> إدارة متكاملة للمعالجة البيداغوجية مع بنك لتجميع خطط المعالجة.</div>
+            <!-- ============================================================ -->
+<!--  قسم الإحصائيات المتقدمة (يظهر للمفتش فقط)                  -->
+<!-- ============================================================ -->
+<div id="advancedStatsSection" style="display:none; margin-top:30px;">
+    
+    <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; border-bottom:2px solid #e9edf2; padding-bottom:12px;">
+        <button class="btn btn-info stats-tab active" data-stats="general" onclick="switchStatsTab('general')">
+            <i class="fas fa-chart-pie"></i> إحصائيات عامة
+        </button>
+        <button class="btn btn-outline stats-tab" data-stats="schools" onclick="switchStatsTab('schools')">
+            <i class="fas fa-school"></i> حسب المؤسسة
+        </button>
+        <button class="btn btn-outline stats-tab" data-stats="difficulties" onclick="switchStatsTab('difficulties')">
+            <i class="fas fa-exclamation-triangle"></i> الصعوبات
+        </button>
+        <button class="btn btn-outline stats-tab" data-stats="results" onclick="switchStatsTab('results')">
+            <i class="fas fa-graduation-cap"></i> نتائج الاختبارات
+        </button>
+    </div>
+
+    <!-- 1. الإحصائيات العامة -->
+    <div class="stats-tab-content" id="statsGeneral" style="display:block;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px;">
+            <div style="background:linear-gradient(145deg, #eef3f9, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--primary); text-align:center;">
+                <i class="fas fa-school" style="font-size:32px; color:var(--primary); margin-bottom:10px; display:block;"></i>
+                <div style="font-size:32px; font-weight:700; color:var(--primary);" id="advTotalSchools">0</div>
+                <div style="font-size:13px; color:var(--text-muted);">مؤسسة مشاركة</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #e5f4ed, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--success); text-align:center;">
+                <i class="fas fa-chalkboard-teacher" style="font-size:32px; color:var(--success); margin-bottom:10px; display:block;"></i>
+                <div style="font-size:32px; font-weight:700; color:var(--success);" id="advTotalTeachers">0</div>
+                <div style="font-size:13px; color:var(--text-muted);">أستاذ نشط</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #fff9ec, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--gold); text-align:center;">
+                <i class="fas fa-user-graduate" style="font-size:32px; color:var(--gold); margin-bottom:10px; display:block;"></i>
+                <div style="font-size:32px; font-weight:700; color:var(--gold);" id="advTotalStudents">0</div>
+                <div style="font-size:13px; color:var(--text-muted);">متعلم مستفيد</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #fce4e4, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--danger); text-align:center;">
+                <i class="fas fa-exclamation-circle" style="font-size:32px; color:var(--danger); margin-bottom:10px; display:block;"></i>
+                <div style="font-size:32px; font-weight:700; color:var(--danger);" id="advTotalDifficulties">0</div>
+                <div style="font-size:13px; color:var(--text-muted);">صعوبة معالجة</div>
+            </div>
+        </div>
+        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:20px;">
+            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
+                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                    <i class="fas fa-chart-pie"></i> توزيع المتعلمين حسب الفئة
+                </h4>
+                <canvas id="advChartCategories" style="max-height:280px;"></canvas>
+            </div>
+            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
+                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                    <i class="fas fa-chart-bar"></i> توزيع المعالجات حسب النوع
+                </h4>
+                <canvas id="advChartTreatmentTypes" style="max-height:280px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. الإحصائيات حسب المؤسسة -->
+    <div class="stats-tab-content" id="statsSchools" style="display:none;">
+        <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2; margin-bottom:20px;">
+            <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                <i class="fas fa-chart-bar"></i> عدد السجلات حسب المؤسسة
+            </h4>
+            <canvas id="advChartSchools" style="max-height:350px;"></canvas>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>المؤسسة</th>
+                        <th>عدد السجلات</th>
+                        <th>عدد المتعلمين</th>
+                        <th>الفئة جـ</th>
+                        <th>الفئة د</th>
+                        <th>المجموع</th>
+                    </tr>
+                </thead>
+                <tbody id="advSchoolsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 3. إحصائيات الصعوبات -->
+    <div class="stats-tab-content" id="statsDifficulties" style="display:none;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:20px;">
+            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
+                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                    <i class="fas fa-chart-pie"></i> طبيعة الصعوبة
+                </h4>
+                <canvas id="advChartDifficultyTypes" style="max-height:280px;"></canvas>
+            </div>
+            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
+                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                    <i class="fas fa-chart-pie"></i> مصدر الصعوبة
+                </h4>
+                <canvas id="advChartDifficultySources" style="max-height:280px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. إحصائيات الاختبارات -->
+    <div class="stats-tab-content" id="statsResults" style="display:none;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px;">
+            <div style="background:linear-gradient(145deg, #eef3f9, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--primary); text-align:center;">
+                <div style="font-size:28px; font-weight:700; color:var(--primary);" id="advTotalAttempts">0</div>
+                <div style="font-size:12px; color:var(--text-muted);">محاولة إجمالية</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #e5f4ed, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--success); text-align:center;">
+                <div style="font-size:28px; font-weight:700; color:var(--success);" id="advAvgScore">0</div>
+                <div style="font-size:12px; color:var(--text-muted);">المعدل العام</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #fff9ec, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--gold); text-align:center;">
+                <div style="font-size:28px; font-weight:700; color:var(--gold);" id="advBestScore">0</div>
+                <div style="font-size:12px; color:var(--text-muted);">أعلى نتيجة</div>
+            </div>
+            <div style="background:linear-gradient(145deg, #fce4e4, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--danger); text-align:center;">
+                <div style="font-size:28px; font-weight:700; color:var(--danger);" id="advWeakScore">0</div>
+                <div style="font-size:12px; color:var(--text-muted);">أدنى نتيجة</div>
+            </div>
+        </div>
+        <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
+            <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
+                <i class="fas fa-chart-line"></i> تطور المعدل العام
+            </h4>
+            <canvas id="advChartResultsTrend" style="max-height:300px;"></canvas>
+        </div>
+    </div>
+    
+</div>
         </div>
 
         <!-- ========== تبويب 2: نماذج المعالجة ========== -->
