@@ -8631,7 +8631,22 @@ async function exportPlanPDF() {
     
     await exportElementToPDF('planForm', filename);
 }
-console.log('✅ دوال تصدير PDF v4.4 جاهزة');
+// ============================================================
+//  🔧 حل احتياطي: ربط التبويبات بعد التحميل الكامل
+// ============================================================
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        if (typeof setupNavigation === 'function') {
+            try {
+                setupNavigation();
+                console.log('✅ تم ربط التبويبات بنجاح');
+            } catch(e) {
+                console.error('❌ خطأ في ربط التبويبات:', e);
+            }
+        }
+    }, 500);
+});
+    console.log('✅ دوال تصدير PDF v4.4 جاهزة');
 console.log('✅ الإحصائيات المتقدمة v4.3 جاهزة');
 console.log('✅ سجل النتائج v4.2 جاهز');
 // ============================================================
