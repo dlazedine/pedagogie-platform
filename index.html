@@ -8459,7 +8459,150 @@ function renderResultsStats() {
         }
     });
 }
+// ============================================================
+//  25. دوال تصدير PDF (بسيطة وعملية)
+// ============================================================
 
+// دالة عامة: تصدير أي عنصر HTML إلى PDF
+async function exportElementToPDF(elementId, filename) {
+    try {
+        // التحقق من وجود المكتبة
+        if (typeof window.jspdf === 'undefined' && typeof window.html2canvas === 'undefined') {
+            showToast('❌ مكتبة PDF غير محمّلة', 'error');
+            return;
+        }
+        
+        const element = document.getElementById(elementId);
+        if (!element) {
+            showToast('❌ العنصر غير موجود', 'error');
+            return;
+        }
+        
+        showToast('⏳ جاري تحضير PDF...', 'info');
+        
+        // تحويل العنصر إلى صورة
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false
+        });
+        
+        // إنشاء PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pdfWidth - 20;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        let heightLeft = imgHeight;
+        let position = 10;
+        
+        // إضافة الصورة إلى الصفحة الأولى
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= (pdfHeight - 20);
+        
+        // إضافة صفحات إضافية إذا لزم
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight + 10;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            heightLeft -= (pdfHeight - 20);
+        }
+        
+        // حفظ الملف
+        pdf.save(filename || 'تصدير.pdf');
+        
+        showToast('✅ تم تصدير PDF بنجاح', 'success');
+        
+    } catch(e) {
+        console.error('خطأ في تصدير PDF:', e);
+        showToast('❌ حدث خطأ في التصدير', 'error');
+    }
+}
+
+// ============================================================
+//  25.1. تصدير تقرير الحصيلة إلى PDF
+// ============================================================
+async function exportReportPDF() {
+    const reportDisplay = document.getElementById('reportDisplay');
+    if (!reportDisplay || reportDisplay.innerHTML.includes('اختر سجلاً')) {
+        showToast('⚠️ اعرض التقرير أولاً', 'warning');
+        return;
+    }
+    
+    const id = document.getElementById('reportSelect').value;
+    const item = traitementData.find(d => d.id === id);
+    const filename = `تقرير_الحصيلة_${item ? item.enseignant : 'غير_محدد'}.pdf`;
+    
+    await exportElementToPDF('reportDisplay', filename);
+}
+
+// ============================================================
+//  25.2. تصدير سجل المتعلمين إلى PDF
+// ============================================================
+async function exportStudentsPDF() {
+    const container = document.getElementById('studentRecordForm');
+    if (!container) {
+        showToast('⚠️ لا توجد بيانات', 'warning');
+        return;
+    }
+    
+    if (!currentStudentId) {
+        showToast('⚠️ حمّل سجلاً أولاً', 'warning');
+        return;
+    }
+    
+    const record = studentsRecords[currentStudentId];
+    const filename = `سجل_المتعلمين_${record ? record.enseignant : 'غير_محدد'}.pdf`;
+    
+    await exportElementToPDF('studentRecordForm', filename);
+}
+
+// ============================================================
+//  25.3. تصدير نتائج الاختبارات إلى PDF
+// ============================================================
+async function exportResultsPDF() {
+    const container = document.getElementById('results-mode');
+    if (!container) {
+        showToast('⚠️ لا توجد بيانات', 'warning');
+        return;
+    }
+    
+    const filename = `نتائج_الاختبارات_${formatDateGeorgian()}.pdf`;
+    
+    await exportElementToPDF('results-mode', filename);
+}
+
+// ============================================================
+//  25.4. تصدير خطة المعالجة إلى PDF
+// ============================================================
+async function exportPlanPDF() {
+    const container = document.getElementById('planForm');
+    if (!container) {
+        showToast('⚠️ لا توجد بيانات', 'warning');
+        return;
+    }
+    
+    if (!currentPlanId) {
+        showToast('⚠️ حمّل خطة أولاً', 'warning');
+        return;
+    }
+    
+    const record = studentsRecords[currentPlanId];
+    const filename = `خطة_المعالجة_${record ? record.enseignant : 'غير_محدد'}.pdf`;
+    
+    await exportElementToPDF('planForm', filename);
+}
+
+console.log('✅ دوال تصدير PDF v4.4 جاهزة');
 console.log('✅ الإحصائيات المتقدمة v4.3 جاهزة');
 console.log('✅ سجل النتائج v4.2 جاهز');
 // ============================================================
