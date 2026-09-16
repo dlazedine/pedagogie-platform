@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المعالجة البيداغوجية -  هندسة الحلول التعليمية الجديدة</title>
+    <title>منصة المعالجة البيداغوجية - درويش الهلالي</title>
 <!-- ============================================================ -->
 <!--  PWA - إعدادات التطبيق                                       -->
 <!-- ============================================================ -->
@@ -24,11 +24,6 @@
     <meta name="author" content="درويش الهلالي">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- مكتبة jsPDF لتصدير PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<!-- مكتبة html2canvas لتحويل HTML إلى صورة -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ============================================================
            1. الجذور والثوابت — يمكن تغييرها من لوحة الألوان
@@ -1796,7 +1791,7 @@
      ============================================================ -->
 <div class="control-buttons" id="controlButtons" style="display: none;">
     <button class="btn-control" onclick="returnToSplash()">
-        <i class="fas fa-home"></i> الرئيسية
+        <i class="fas fa-home"></i> العودة للترحيب
     </button>
 </div>
 
@@ -1824,11 +1819,9 @@
 
         <div class="city-icon"><i class="fas fa-landmark"></i></div>
         <div class="city-name">
-            <i class="fas fa-bridge"></i> وزارة التربية الوطنية <i class="fas fa-bridge"></i>
+            <i class="fas fa-bridge"></i> الجزائر 2027/2026 <i class="fas fa-bridge"></i>
         </div>
- <div class="city-name">
-            <i class="fas fa-bridge"></i> المفتشية العامة <i class="fas fa-bridge"></i>
-        </div>
+
         <h1 class="title">
             <i class="fas fa-hand-holding-heart"></i> منصة المعالجة البيداغوجية
         </h1>
@@ -1850,7 +1843,7 @@
             </div>
             <div class="editable-field">
                 <i class="fas fa-phone-alt"></i>
-                <input type="text" id="inspectorPhone" placeholder="رقم الهاتف" value="0659681227">
+                <input type="text" id="inspectorPhone" placeholder="رقم الهاتف" value="0779353736">
             </div>
             <div class="editable-field">
                 <i class="fas fa-map-marker-alt"></i>
@@ -1897,9 +1890,9 @@
 
         <!-- معلومات النداء -->
         <div class="event-info">
-            <div class="event-title">📘 التطوير الرقمي </div>
+            <div class="event-title">📘 التطوير الرقمي نداء اليونسكو (2014)</div>
             <div class="event-desc">
-                 تهدف هذه المنصة إلى تسهيل إجراءات المعالجة البيداغوجية على الأساتذة، وتوفير بيئة رقمية متكاملة لتشخيص الصعوبات، واقتراح خطط علاجية، ومتابعة تقدم المتعثرين من المتعلمين 
+                تهدف هذه المنصة إلى تسهيل إجراءات المعالجة البيداغوجية على الأساتذة، وتوفير بيئة رقمية متكاملة لتشخيص الصعوبات، واقتراح خطط علاجية، ومتابعة التقدم.
             </div>
         </div>
 
@@ -1910,7 +1903,7 @@
 
         <div class="footer-note">
             <i class="fas fa-crown" style="color:var(--gold);"></i>
-            الإصدار 4.0 · جميع الحقوق محفوظة © 2026 |  تصميم وتطوير حصري لمفتش التربية والتكوين درويش الهلالي
+            وزارة التربية الوطنية - المفتشية العامة
         </div>
     </div>
 
@@ -2052,140 +2045,7 @@
                 <div class="stat-card"><div class="number" id="statPending">0</div><div class="label">معايير تنتظر المعالجة</div></div>
             </div>
             <div class="alert alert-info"><i class="fas fa-info-circle"></i> إدارة متكاملة للمعالجة البيداغوجية مع بنك لتجميع خطط المعالجة.</div>
-            <!-- ============================================================ -->
-<!--  قسم الإحصائيات المتقدمة (يظهر للمفتش فقط)                  -->
-<!-- ============================================================ -->
-<div id="advancedStatsSection" style="display:none; margin-top:30px;">
-    
-    <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; border-bottom:2px solid #e9edf2; padding-bottom:12px;">
-        <button class="btn btn-info stats-tab active" data-stats="general" onclick="switchStatsTab('general')">
-            <i class="fas fa-chart-pie"></i> إحصائيات عامة
-        </button>
-        <button class="btn btn-outline stats-tab" data-stats="schools" onclick="switchStatsTab('schools')">
-            <i class="fas fa-school"></i> حسب المؤسسة
-        </button>
-        <button class="btn btn-outline stats-tab" data-stats="difficulties" onclick="switchStatsTab('difficulties')">
-            <i class="fas fa-exclamation-triangle"></i> الصعوبات
-        </button>
-        <button class="btn btn-outline stats-tab" data-stats="results" onclick="switchStatsTab('results')">
-            <i class="fas fa-graduation-cap"></i> نتائج الاختبارات
-        </button>
-    </div>
-
-    <!-- 1. الإحصائيات العامة -->
-    <div class="stats-tab-content" id="statsGeneral" style="display:block;">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px;">
-            <div style="background:linear-gradient(145deg, #eef3f9, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--primary); text-align:center;">
-                <i class="fas fa-school" style="font-size:32px; color:var(--primary); margin-bottom:10px; display:block;"></i>
-                <div style="font-size:32px; font-weight:700; color:var(--primary);" id="advTotalSchools">0</div>
-                <div style="font-size:13px; color:var(--text-muted);">مؤسسة مشاركة</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #e5f4ed, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--success); text-align:center;">
-                <i class="fas fa-chalkboard-teacher" style="font-size:32px; color:var(--success); margin-bottom:10px; display:block;"></i>
-                <div style="font-size:32px; font-weight:700; color:var(--success);" id="advTotalTeachers">0</div>
-                <div style="font-size:13px; color:var(--text-muted);">أستاذ نشط</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #fff9ec, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--gold); text-align:center;">
-                <i class="fas fa-user-graduate" style="font-size:32px; color:var(--gold); margin-bottom:10px; display:block;"></i>
-                <div style="font-size:32px; font-weight:700; color:var(--gold);" id="advTotalStudents">0</div>
-                <div style="font-size:13px; color:var(--text-muted);">متعلم مستفيد</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #fce4e4, #fff); padding:20px; border-radius:14px; border-right:4px solid var(--danger); text-align:center;">
-                <i class="fas fa-exclamation-circle" style="font-size:32px; color:var(--danger); margin-bottom:10px; display:block;"></i>
-                <div style="font-size:32px; font-weight:700; color:var(--danger);" id="advTotalDifficulties">0</div>
-                <div style="font-size:13px; color:var(--text-muted);">صعوبة معالجة</div>
-            </div>
         </div>
-        
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:20px;">
-            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                    <i class="fas fa-chart-pie"></i> توزيع المتعلمين حسب الفئة
-                </h4>
-                <canvas id="advChartCategories" style="max-height:280px;"></canvas>
-            </div>
-            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                    <i class="fas fa-chart-bar"></i> توزيع المعالجات حسب النوع
-                </h4>
-                <canvas id="advChartTreatmentTypes" style="max-height:280px;"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. الإحصائيات حسب المؤسسة -->
-    <div class="stats-tab-content" id="statsSchools" style="display:none;">
-        <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2; margin-bottom:20px;">
-            <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                <i class="fas fa-chart-bar"></i> عدد السجلات حسب المؤسسة
-            </h4>
-            <canvas id="advChartSchools" style="max-height:350px;"></canvas>
-        </div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>المؤسسة</th>
-                        <th>عدد السجلات</th>
-                        <th>عدد المتعلمين</th>
-                        <th>الفئة جـ</th>
-                        <th>الفئة د</th>
-                        <th>المجموع</th>
-                    </tr>
-                </thead>
-                <tbody id="advSchoolsTableBody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 3. إحصائيات الصعوبات -->
-    <div class="stats-tab-content" id="statsDifficulties" style="display:none;">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(400px, 1fr)); gap:20px;">
-            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                    <i class="fas fa-chart-pie"></i> طبيعة الصعوبة
-                </h4>
-                <canvas id="advChartDifficultyTypes" style="max-height:280px;"></canvas>
-            </div>
-            <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
-                <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                    <i class="fas fa-chart-pie"></i> مصدر الصعوبة
-                </h4>
-                <canvas id="advChartDifficultySources" style="max-height:280px;"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. إحصائيات الاختبارات -->
-    <div class="stats-tab-content" id="statsResults" style="display:none;">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:25px;">
-            <div style="background:linear-gradient(145deg, #eef3f9, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--primary); text-align:center;">
-                <div style="font-size:28px; font-weight:700; color:var(--primary);" id="advTotalAttempts">0</div>
-                <div style="font-size:12px; color:var(--text-muted);">محاولة إجمالية</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #e5f4ed, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--success); text-align:center;">
-                <div style="font-size:28px; font-weight:700; color:var(--success);" id="advAvgScore">0</div>
-                <div style="font-size:12px; color:var(--text-muted);">المعدل العام</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #fff9ec, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--gold); text-align:center;">
-                <div style="font-size:28px; font-weight:700; color:var(--gold);" id="advBestScore">0</div>
-                <div style="font-size:12px; color:var(--text-muted);">أعلى نتيجة</div>
-            </div>
-            <div style="background:linear-gradient(145deg, #fce4e4, #fff); padding:18px; border-radius:14px; border-right:4px solid var(--danger); text-align:center;">
-                <div style="font-size:28px; font-weight:700; color:var(--danger);" id="advWeakScore">0</div>
-                <div style="font-size:12px; color:var(--text-muted);">أدنى نتيجة</div>
-            </div>
-        </div>
-        <div style="background:#fff; padding:20px; border-radius:14px; border:1px solid #e9edf2;">
-            <h4 style="color:var(--primary); margin-bottom:15px; font-size:16px;">
-                <i class="fas fa-chart-line"></i> تطور المعدل العام
-            </h4>
-            <canvas id="advChartResultsTrend" style="max-height:300px;"></canvas>
-        </div>
-    </div>
-    
-</div>
 
         <!-- ========== تبويب 2: نماذج المعالجة ========== -->
         <div class="tab-content" id="tab-models">
@@ -2227,7 +2087,6 @@
                 <button class="btn btn-info" onclick="loadStudentRecord()"><i class="fas fa-download"></i> تحميل البيانات</button>
                 <button class="btn btn-danger" onclick="clearStudentRecord()"><i class="fas fa-eraser"></i> تفريغ البيانات</button>
                 <button class="btn btn-success" onclick="saveStudentRecord()"><i class="fas fa-save"></i> حفظ البيانات</button>
-                <button class="btn btn-danger" onclick="exportStudentsPDF()">  <i class="fas fa-file-pdf"></i> تصدير PDF</button>
                 <button class="btn btn-word" onclick="exportStudentsWord()"><i class="fas fa-file-word"></i> تصدير Word</button>
             </div>
             <div id="studentRecordForm" class="report-form">
@@ -2250,7 +2109,6 @@
                 <button class="btn btn-danger" onclick="clearPlan()"><i class="fas fa-eraser"></i> تفريغ</button>
                 <button class="btn btn-success" onclick="savePlan()"><i class="fas fa-save"></i> حفظ</button>
                 <button class="btn btn-word" onclick="exportPlanWord()"><i class="fas fa-file-word"></i> تصدير Word</button>
-                <button class="btn btn-danger" onclick="exportPlanPDF()">  <i class="fas fa-file-pdf"></i> تصدير PDF</button>
             </div>
             <div id="planForm" class="report-form">
                 <div class="field-group"><label>المؤسسة</label><input type="text" id="pEtablissement" readonly></div>
@@ -2372,7 +2230,6 @@
                 </select>
                 <button class="btn btn-info" onclick="loadReport()"><i class="fas fa-eye"></i> عرض التقرير</button>
                 <button class="btn btn-word" onclick="exportReportWord()"><i class="fas fa-file-word"></i> تصدير Word</button>
-                <button class="btn btn-excel" onclick="exportReportPDF()" style="background:#b22234;"> <i class="fas fa-file-pdf"></i> تصدير PDF</button>
                 <button class="btn btn-primary" onclick="printReport()"><i class="fas fa-print"></i> طباعة</button>
             </div>
             <div id="reportDisplay" class="report-form"><p style="color:#6c757d;">اختر سجلاً لعرض التقرير.</p></div>
@@ -2651,9 +2508,6 @@
                                 <button class="btn btn-word" onclick="exportResultsWord()">
                                     <i class="fas fa-file-word"></i> تصدير Word
                                 </button>
-                             <button class="btn btn-danger" onclick="exportResultsPDF()">
-    <i class="fas fa-file-pdf"></i> تصدير PDF
-</button>
                                 <button class="btn btn-danger admin-only-btn" onclick="clearAllResults()">
                                     <i class="fas fa-trash"></i> حذف الكل
                                 </button>
@@ -3408,7 +3262,7 @@ function applyRolePermissions() {
     
     const isInspector = currentUser.role === 'inspector';
     
-    // إخفاء التبويبات الخاصة بالمفتش
+    // إخفاء التبويبات الخاصة بالمفتش فقط
     document.querySelectorAll('.admin-only').forEach(el => {
         el.classList.toggle('hidden-tab', !isInspector);
     });
@@ -3417,172 +3271,70 @@ function applyRolePermissions() {
     document.querySelectorAll('.admin-only-btn').forEach(el => {
         el.style.display = isInspector ? '' : 'none';
     });
-    
-    // 🆕 إظهار قسم الإحصائيات المتقدمة للمفتش فقط
-    const advStats = document.getElementById('advancedStatsSection');
-    if (advStats) {
-        advStats.style.display = isInspector ? 'block' : 'none';
-        if (isInspector) {
-            setTimeout(() => {
-                if (typeof renderAdvancedStats === 'function') {
-                    renderAdvancedStats();
-                }
-            }, 500);
-        }
-    }
 }
 
 // ============================================================
-//  8. التهيئة عند تحميل الصفحة (نسخة مُحصّنة)
+//  8. التهيئة عند تحميل الصفحة
 // ============================================================
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 بدء التهيئة...');
+    // إضافة أنماط الرسوم المتحركة
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
     
-    // 1. إضافة أنماط الرسوم المتحركة
-    try {
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(400px); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(400px); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-        console.log('✅ أنماط الرسوم المتحركة');
-    } catch(e) { console.error('❌ أنماط:', e); }
+    // تهيئة المستخدمين
+    await initializeUsers();
     
-    // 2. تهيئة المستخدمين
-    try {
-        await initializeUsers();
-        console.log('✅ تهيئة المستخدمين');
-    } catch(e) { console.error('❌ المستخدمون:', e); }
+    // ربط أحداث التنقل
+    setupNavigation();
     
-    // 3. ربط التنقل (الأهم!)
-    try {
-        if (typeof setupNavigation === 'function') {
-            setupNavigation();
-            console.log('✅ ربط التنقل');
+    // ربط حقول المفتش
+    setupInspectorFields();
+    
+    // محاولة استعادة الجلسة السابقة
+    const session = loadSession();
+    if (session) {
+        currentUser = session.user;
+        // التحقق من أن المستخدم لا يزال موجوداً
+        const user = getUsers().find(u => u.id === currentUser.id);
+        if (user && user.active) {
+            enterPlatformAfterLogin();
         } else {
-            console.error('❌ setupNavigation غير موجودة');
+            clearSession();
+            currentUser = null;
         }
-    } catch(e) { console.error('❌ التنقل:', e); }
+    }
     
-    // 4. ربط حقول المفتش
-    try {
-        if (typeof setupInspectorFields === 'function') {
-            setupInspectorFields();
-            console.log('✅ حقول المفتش');
-        }
-    } catch(e) { console.error('❌ حقول المفتش:', e); }
+    // إخفاء تلميح المستخدم إن وُجد مستخدمون آخرون
+    const users = getUsers();
+    if (users.length > 1) {
+        document.getElementById('defaultUserHint').style.display = 'none';
+    }
     
-    // 5. استعادة الجلسة
-    try {
-        const session = loadSession();
-        if (session) {
-            currentUser = session.user;
-            const user = getUsers().find(u => u.id === currentUser.id);
-            if (user && user.active) {
-                enterPlatformAfterLogin();
-                console.log('✅ استعادة الجلسة');
-            } else {
-                clearSession();
-                currentUser = null;
-            }
-        }
-    } catch(e) { console.error('❌ الجلسة:', e); }
+    // تحميل الألوان المحفوظة
+    loadSavedColors();
     
-    // 6. إخفاء تلميح المستخدم
-    try {
-        const users = getUsers();
-        if (users.length > 1) {
-            const hint = document.getElementById('defaultUserHint');
-            if (hint) hint.style.display = 'none';
-        }
-    } catch(e) { console.error('❌ التلميح:', e); }
+    // تحميل شعار التذييل المحفوظ
+    loadCustomFooterLogo();
+// ⚡ حل مشكلة حفظ البيانات — تحميل إجباري عند بدء التطبيق
+console.log('🔄 جاري التحميل الإجباري للبيانات...');
+setTimeout(function() {
+    if (typeof loadAllData === 'function') {
+        loadAllData();
+        console.log('✅ تم تحميل البيانات تلقائياً عند البدء');
+        console.log('   📊 السجلات: ' + (typeof traitementData !== 'undefined' ? traitementData.length : 0));
+    }
+}, 100);
     
-    // 7. تحميل الألوان
-    try {
-        if (typeof loadSavedColors === 'function') {
-            loadSavedColors();
-            console.log('✅ الألوان');
-        }
-    } catch(e) { console.error('❌ الألوان:', e); }
-    
-    // 8. تحميل شعار التذييل
-    try {
-        if (typeof loadCustomFooterLogo === 'function') {
-            loadCustomFooterLogo();
-            console.log('✅ شعار التذييل');
-        }
-    } catch(e) { console.error('❌ شعار التذييل:', e); }
-    
-    // 9. تحميل البيانات
-    try {
-        if (typeof loadAllData === 'function') {
-            setTimeout(function() {
-                loadAllData();
-                console.log('✅ تحميل البيانات');
-            }, 100);
-        }
-    } catch(e) { console.error('❌ البيانات:', e); }
-    
-    console.log('🎉 اكتملت التهيئة!');
-});
-    // ============================================================
-//  إعادة ربط التبويبات (حل احتياطي)
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        const tabs = document.querySelectorAll('.nav-tab');
-        console.log('🔧 عدد التبويبات:', tabs.length);
-        
-        tabs.forEach(tab => {
-            // إزالة المستمعين القدامى
-            const newTab = tab.cloneNode(true);
-            tab.parentNode.replaceChild(newTab, tab);
-        });
-        
-        // إعادة الربط
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const targetTab = this.dataset.tab;
-                if (!targetTab) return;
-                
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                const target = document.getElementById('tab-' + targetTab);
-                if (target) target.classList.add('active');
-                
-                // استدعاء الدوال الخاصة بكل تبويب
-                switch(targetTab) {
-                    case 'models': if (typeof renderModels === 'function') renderModels(); break;
-                    case 'bank': 
-                        if (typeof renderBank === 'function') renderBank();
-                        if (typeof populateExerciceSelect === 'function') populateExerciceSelect();
-                        if (typeof renderExercices === 'function') renderExercices();
-                        break;
-                    case 'learner':
-                        if (typeof initializeQuizBuilder === 'function') initializeQuizBuilder();
-                        break;
-                    case 'users':
-                        if (typeof renderUsersList === 'function') renderUsersList();
-                        break;
-                    case 'settings':
-                        if (typeof renderColorSettings === 'function') renderColorSettings();
-                        break;
-                }
-            });
-        });
-        
-        console.log('✅ تم ربط التبويبات بنجاح');
-    }, 1000);
-});
     console.log(`✅ منصة المعالجة البيداغوجية v${APP_VERSION} جاهزة`);
 });
 
@@ -8211,14 +7963,14 @@ function getInspectorData() {
             name: 'درويش الهلالي',
             role: 'مفتش مادة اللغة العربية والتربية الإسلامية',
             email: 'dlazedine68@gmail.com',
-            phone: '0659681227'
+            phone: '0779353736'
         };
     } catch(e) {
         return {
             name: 'درويش الهلالي',
             role: 'مفتش مادة اللغة العربية والتربية الإسلامية',
             email: 'dlazedine68@gmail.com',
-            phone: '0659681227'
+            phone: '0779353736'
         };
     }
 }
@@ -8226,467 +7978,7 @@ function getInspectorData() {
 function formatDateGeorgian() {
     return new Date().toISOString().split('T')[0];
 }
-// ============================================================
-//  الإحصائيات المتقدمة (للمفتش فقط)
-// ============================================================
-let advCharts = {};
 
-function switchStatsTab(tabName) {
-    document.querySelectorAll('.stats-tab').forEach(t => {
-        t.classList.remove('active', 'btn-info');
-        t.classList.add('btn-outline');
-    });
-    document.querySelectorAll('.stats-tab-content').forEach(c => c.style.display = 'none');
-    
-    const activeTab = document.querySelector(`[data-stats="${tabName}"]`);
-    if (activeTab) {
-        activeTab.classList.add('active', 'btn-info');
-        activeTab.classList.remove('btn-outline');
-    }
-    
-    const tabMap = {
-        'general': 'statsGeneral',
-        'schools': 'statsSchools',
-        'difficulties': 'statsDifficulties',
-        'results': 'statsResults'
-    };
-    
-    const content = document.getElementById(tabMap[tabName]);
-    if (content) content.style.display = 'block';
-    
-    if (tabName === 'schools') renderSchoolsStats();
-    if (tabName === 'difficulties') renderDifficultiesStats();
-    if (tabName === 'results') renderResultsStats();
-}
-
-function renderAdvancedStats() {
-    if (!currentUser || currentUser.role !== 'inspector') return;
-    
-    // إحصائيات عامة
-    const totalSchools = new Set(traitementData.map(d => d.etablissement).filter(Boolean)).size;
-    const totalTeachers = new Set(traitementData.map(d => d.enseignant).filter(Boolean)).size;
-    let totalStudents = 0;
-    let totalDifficulties = 0;
-    
-    traitementData.forEach(item => {
-        const record = studentsRecords[item.id] || {};
-        totalStudents += record.totalStudentsCount || 0;
-        totalDifficulties += (item.criteria || []).length;
-    });
-    
-    const el = (id) => document.getElementById(id);
-    if (el('advTotalSchools')) el('advTotalSchools').textContent = totalSchools;
-    if (el('advTotalTeachers')) el('advTotalTeachers').textContent = totalTeachers;
-    if (el('advTotalStudents')) el('advTotalStudents').textContent = totalStudents;
-    if (el('advTotalDifficulties')) el('advTotalDifficulties').textContent = totalDifficulties;
-    
-    // مخطط توزيع المتعلمين حسب الفئة
-    renderCategoryChart();
-    
-    // مخطط أنماط المعالجة
-    renderTreatmentChart();
-}
-
-function renderCategoryChart() {
-    const canvas = document.getElementById('advChartCategories');
-    if (!canvas) return;
-    
-    if (advCharts.categories) advCharts.categories.destroy();
-    
-    let categC = 0, categD = 0;
-    traitementData.forEach(item => {
-        categC += item.categorieC || 0;
-        categD += item.categorieD || 0;
-    });
-    
-    advCharts.categories = new Chart(canvas, {
-        type: 'doughnut',
-        data: {
-            labels: ['الفئة جـ', 'الفئة د'],
-            datasets: [{
-                data: [categC, categD],
-                backgroundColor: ['#c49b3f', '#b22234'],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: { font: { size: 14 }, padding: 15 }
-                }
-            }
-        }
-    });
-}
-
-function renderTreatmentChart() {
-    const canvas = document.getElementById('advChartTreatmentTypes');
-    if (!canvas) return;
-    
-    if (advCharts.treatment) advCharts.treatment.destroy();
-    
-    const treatmentTypes = {};
-    traitementData.forEach(item => {
-        const record = studentsRecords[item.id];
-        if (!record) return;
-        const plan = record.plan || {};
-        if (plan.treatmentModes) {
-            treatmentTypes[plan.treatmentModes] = (treatmentTypes[plan.treatmentModes] || 0) + 1;
-        }
-    });
-    
-    const labels = Object.keys(treatmentTypes).slice(0, 6);
-    const values = labels.map(k => treatmentTypes[k]);
-    
-    if (labels.length === 0) {
-        labels.push('لا توجد بيانات');
-        values.push(1);
-    }
-    
-    advCharts.treatment = new Chart(canvas, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'عدد الحالات',
-                data: values,
-                backgroundColor: '#1a3d6e',
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { beginAtZero: true, ticks: { stepSize: 1 } }
-            }
-        }
-    });
-}
-
-function renderSchoolsStats() {
-    const tbody = document.getElementById('advSchoolsTableBody');
-    const canvas = document.getElementById('advChartSchools');
-    if (!tbody) return;
-    
-    const schoolsData = {};
-    traitementData.forEach(item => {
-        const school = item.etablissement || 'غير محدد';
-        if (!schoolsData[school]) {
-            schoolsData[school] = { count: 0, students: 0, categC: 0, categD: 0 };
-        }
-        schoolsData[school].count++;
-        const record = studentsRecords[item.id] || {};
-        schoolsData[school].students += record.totalStudentsCount || 0;
-        schoolsData[school].categC += item.categorieC || 0;
-        schoolsData[school].categD += item.categorieD || 0;
-    });
-    
-    const sorted = Object.entries(schoolsData).sort((a, b) => b[1].count - a[1].count);
-    
-    tbody.innerHTML = '';
-    sorted.forEach(([school, data], idx) => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${idx + 1}</td>
-                <td><strong>${escapeHtml(school)}</strong></td>
-                <td style="text-align:center;">${data.count}</td>
-                <td style="text-align:center;">${data.students}</td>
-                <td style="text-align:center;">${data.categC}</td>
-                <td style="text-align:center;">${data.categD}</td>
-                <td style="text-align:center;"><strong>${data.categC + data.categD}</strong></td>
-            </tr>
-        `;
-    });
-    
-    if (canvas) {
-        if (advCharts.schools) advCharts.schools.destroy();
-        
-        advCharts.schools = new Chart(canvas, {
-            type: 'bar',
-            data: {
-                labels: sorted.slice(0, 15).map(s => s[0]),
-                datasets: [{
-                    label: 'عدد السجلات',
-                    data: sorted.slice(0, 15).map(s => s[1].count),
-                    backgroundColor: '#167c80',
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
-                }
-            }
-        });
-    }
-}
-
-function renderDifficultiesStats() {
-    const canvas1 = document.getElementById('advChartDifficultyTypes');
-    const canvas2 = document.getElementById('advChartDifficultySources');
-    
-    const types = {};
-    const sources = {};
-    
-    traitementData.forEach(item => {
-        const record = studentsRecords[item.id];
-        if (!record) return;
-        const plan = record.plan || {};
-        
-        if (plan.difficultyType) {
-            types[plan.difficultyType] = (types[plan.difficultyType] || 0) + 1;
-        }
-        if (plan.difficultySource) {
-            sources[plan.difficultySource] = (sources[plan.difficultySource] || 0) + 1;
-        }
-    });
-    
-    if (canvas1) {
-        if (advCharts.diffTypes) advCharts.diffTypes.destroy();
-        advCharts.diffTypes = new Chart(canvas1, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(types).length ? Object.keys(types) : ['لا توجد بيانات'],
-                datasets: [{
-                    data: Object.values(types).length ? Object.values(types) : [1],
-                    backgroundColor: ['#1a3d6e', '#c49b3f', '#b22234', '#167c80', '#17a2b8']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
-    }
-    
-    if (canvas2) {
-        if (advCharts.diffSources) advCharts.diffSources.destroy();
-        advCharts.diffSources = new Chart(canvas2, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(sources).length ? Object.keys(sources) : ['لا توجد بيانات'],
-                datasets: [{
-                    data: Object.values(sources).length ? Object.values(sources) : [1],
-                    backgroundColor: ['#c49b3f', '#1a3d6e', '#b22234', '#167c80', '#17a2b8']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
-    }
-}
-
-function renderResultsStats() {
-    const results = JSON.parse(localStorage.getItem('learnerResults') || '[]');
-    
-    const el = (id) => document.getElementById(id);
-    
-    if (results.length === 0) {
-        if (el('advTotalAttempts')) el('advTotalAttempts').textContent = '0';
-        if (el('advAvgScore')) el('advAvgScore').textContent = '0';
-        if (el('advBestScore')) el('advBestScore').textContent = '0';
-        if (el('advWeakScore')) el('advWeakScore').textContent = '0';
-        return;
-    }
-    
-    const totalAttempts = results.length;
-    const avgScore = Math.round(results.reduce((s, r) => s + (r.percent || 0), 0) / totalAttempts);
-    const bestScore = Math.max(...results.map(r => r.percent || 0));
-    const weakScore = Math.min(...results.map(r => r.percent || 0));
-    
-    if (el('advTotalAttempts')) el('advTotalAttempts').textContent = totalAttempts;
-    if (el('advAvgScore')) el('advAvgScore').textContent = avgScore + '٪';
-    if (el('advBestScore')) el('advBestScore').textContent = bestScore + '٪';
-    if (el('advWeakScore')) el('advWeakScore').textContent = weakScore + '٪';
-    
-    // المخطط الزمني
-    const canvas = document.getElementById('advChartResultsTrend');
-    if (!canvas) return;
-    
-    if (advCharts.resultsTrend) advCharts.resultsTrend.destroy();
-    
-    const byDate = {};
-    results.forEach(r => {
-        const d = new Date(r.savedAt).toLocaleDateString('ar-DZ');
-        if (!byDate[d]) byDate[d] = [];
-        byDate[d].push(r.percent || 0);
-    });
-    
-    const dates = Object.keys(byDate);
-    const avgs = dates.map(d => Math.round(byDate[d].reduce((a, b) => a + b, 0) / byDate[d].length));
-    
-    advCharts.resultsTrend = new Chart(canvas, {
-        type: 'line',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'المعدل اليومي',
-                data: avgs,
-                borderColor: '#167c80',
-                backgroundColor: 'rgba(22, 124, 128, 0.1)',
-                tension: 0.3,
-                fill: true,
-                pointRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
-            }
-        }
-    });
-}
-// ============================================================
-//  25. دوال تصدير PDF (بسيطة وعملية)
-// ============================================================
-// دالة عامة: تصدير أي عنصر HTML إلى PDF
-async function exportElementToPDF(elementId, filename) {
-    try {
-        // التحقق من وجود المكتبة
-        if (typeof window.jspdf === 'undefined' && typeof window.html2canvas === 'undefined') {
-            showToast('❌ مكتبة PDF غير محمّلة', 'error');
-            return;
-        }    
-        const element = document.getElementById(elementId);
-        if (!element) {
-            showToast('❌ العنصر غير موجود', 'error');
-            return;
-        } 
-        showToast('⏳ جاري تحضير PDF...', 'info');
-        // تحويل العنصر إلى صورة
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            logging: false
-        });
-        // إنشاء PDF
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pdfWidth - 20;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 10;
-        // إضافة الصورة إلى الصفحة الأولى
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-        heightLeft -= (pdfHeight - 20);
-        // إضافة صفحات إضافية إذا لزم
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight + 10;
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-            heightLeft -= (pdfHeight - 20);
-        }
-        // حفظ الملف
-        pdf.save(filename || 'تصدير.pdf');
-        showToast('✅ تم تصدير PDF بنجاح', 'success');
-    } catch(e) {
-        console.error('خطأ في تصدير PDF:', e);
-        showToast('❌ حدث خطأ في التصدير', 'error');
-    }
-}
-
-// ============================================================
-//  25.1. تصدير تقرير الحصيلة إلى PDF
-// ============================================================
-async function exportReportPDF() {
-    const reportDisplay = document.getElementById('reportDisplay');
-    if (!reportDisplay || reportDisplay.innerHTML.includes('اختر سجلاً')) {
-        showToast('⚠️ اعرض التقرير أولاً', 'warning');
-        return;
-    }
-    const id = document.getElementById('reportSelect').value;
-    const item = traitementData.find(d => d.id === id);
-    const filename = `تقرير_الحصيلة_${item ? item.enseignant : 'غير_محدد'}.pdf`;
-    await exportElementToPDF('reportDisplay', filename);
-}
-// ============================================================
-//  25.2. تصدير سجل المتعلمين إلى PDF
-// ============================================================
-async function exportStudentsPDF() {
-    const container = document.getElementById('studentRecordForm');
-    if (!container) {
-        showToast('⚠️ لا توجد بيانات', 'warning');
-        return;
-    }
-    if (!currentStudentId) {
-        showToast('⚠️ حمّل سجلاً أولاً', 'warning');
-        return;
-    } 
-    const record = studentsRecords[currentStudentId];
-    const filename = `سجل_المتعلمين_${record ? record.enseignant : 'غير_محدد'}.pdf`;
-    
-    await exportElementToPDF('studentRecordForm', filename);
-}
-// ============================================================
-//  25.3. تصدير نتائج الاختبارات إلى PDF
-// ============================================================
-async function exportResultsPDF() {
-    const container = document.getElementById('results-mode');
-    if (!container) {
-        showToast('⚠️ لا توجد بيانات', 'warning');
-        return;
-    }
-    const filename = `نتائج_الاختبارات_${formatDateGeorgian()}.pdf`;
-    await exportElementToPDF('results-mode', filename);
-}
-// ============================================================
-//  25.4. تصدير خطة المعالجة إلى PDF
-// ============================================================
-async function exportPlanPDF() {
-    const container = document.getElementById('planForm');
-    if (!container) {
-        showToast('⚠️ لا توجد بيانات', 'warning');
-        return;
-    }
-    if (!currentPlanId) {
-        showToast('⚠️ حمّل خطة أولاً', 'warning');
-        return;
-    }
-    const record = studentsRecords[currentPlanId];
-    const filename = `خطة_المعالجة_${record ? record.enseignant : 'غير_محدد'}.pdf`;
-    
-    await exportElementToPDF('planForm', filename);
-}
-// ============================================================
-//  🔧 حل احتياطي: ربط التبويبات بعد التحميل الكامل
-// ============================================================
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        if (typeof setupNavigation === 'function') {
-            try {
-                setupNavigation();
-                console.log('✅ تم ربط التبويبات بنجاح');
-            } catch(e) {
-                console.error('❌ خطأ في ربط التبويبات:', e);
-            }
-        }
-    }, 500);
-});
-    console.log('✅ دوال تصدير PDF v4.4 جاهزة');
-console.log('✅ الإحصائيات المتقدمة v4.3 جاهزة');
 console.log('✅ سجل النتائج v4.2 جاهز');
 // ============================================================
 //  23.19.14. ربط أزرار المراجعة والحفظ والإعادة
@@ -8699,18 +7991,21 @@ document.addEventListener('DOMContentLoaded', function() {
             reviewBtn.dataset.bound = 'true';
             reviewBtn.addEventListener('click', reviewQuizResult);
         }
+        
         // زر حفظ النتيجة
         const saveBtn = document.getElementById('learner-save-button');
         if (saveBtn && !saveBtn.dataset.bound) {
             saveBtn.dataset.bound = 'true';
             saveBtn.addEventListener('click', saveQuizResult);
         }
+        
         // زر إعادة المحاولة
         const resetBtn = document.getElementById('learner-reset-button');
         if (resetBtn && !resetBtn.dataset.bound) {
             resetBtn.dataset.bound = 'true';
             resetBtn.addEventListener('click', resetQuizAttempt);
         }
+        
         // حقل اسم المتعلم - إزالة الخطأ عند الكتابة
         const nameInput = document.getElementById('learner-name-input');
         if (nameInput && !nameInput.dataset.bound) {
@@ -8726,6 +8021,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 });
+
 // ============================================================
 //  24. الميزات الأصلية للـ PWA
 // ============================================================
@@ -9216,53 +8512,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('✅ PWA جاهز');
-// ============================================================
-//  إصلاح: إنشاء المستخدم الافتراضي إذا كان localStorage فارغاً
-// ============================================================
-document.addEventListener('DOMContentLoaded', async function() {
-    // انتظر قليلاً حتى تجهز الدوال
-    setTimeout(async () => {
-        try {
-            const users = JSON.parse(localStorage.getItem('pgb_users') || '[]');
-            
-            if (users.length === 0) {
-                console.log('⚠️ لا يوجد مستخدمون — جاري إنشاء admin الافتراضي');
-                
-                // إنشاء المفتش الافتراضي
-                const adminPasswordHash = await hashPassword('admin123');
-                const adminUser = {
-                    id: 'admin_' + Date.now().toString(36),
-                    username: 'admin',
-                    fullName: 'درويش الهلالي',
-                    email: 'dlazedine68@gmail.com',
-                    school: 'المقاطعة الثانية - قسنطينة',
-                    role: 'inspector',
-                    passwordHash: adminPasswordHash,
-                    createdAt: new Date().toISOString(),
-                    lastLogin: null,
-                    mustChangePassword: false,
-                    active: true
-                };
-                
-                localStorage.setItem('pgb_users', JSON.stringify([adminUser]));
-                console.log('✅ تم إنشاء حساب admin الافتراضي');
-                
-                // إظهار تلميح للمستخدم
-                const hint = document.getElementById('defaultUserHint');
-                if (hint) hint.style.display = 'block';
-                
-                // إعادة تحميل الصفحة لتطبيق التغييرات
-                setTimeout(() => {
-                    if (confirm('✅ تم إنشاء حساب المفتش الافتراضي.\n\nهل تريد إعادة تحميل الصفحة؟')) {
-                        location.reload();
-                    }
-                }, 1000);
-            }
-        } catch(e) {
-            console.error('خطأ في الفحص:', e);
-        }
-    }, 500);
-});
+
 </script>
 </body>
 </html>
