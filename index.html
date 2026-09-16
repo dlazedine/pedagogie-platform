@@ -3269,7 +3269,7 @@ function applyRolePermissions() {
     
     const isInspector = currentUser.role === 'inspector';
     
-    // إخفاء التبويبات الخاصة بالمفتش فقط
+    // إخفاء التبويبات الخاصة بالمفتش
     document.querySelectorAll('.admin-only').forEach(el => {
         el.classList.toggle('hidden-tab', !isInspector);
     });
@@ -3278,6 +3278,19 @@ function applyRolePermissions() {
     document.querySelectorAll('.admin-only-btn').forEach(el => {
         el.style.display = isInspector ? '' : 'none';
     });
+    
+    // 🆕 إظهار قسم الإحصائيات المتقدمة للمفتش فقط
+    const advStats = document.getElementById('advancedStatsSection');
+    if (advStats) {
+        advStats.style.display = isInspector ? 'block' : 'none';
+        if (isInspector) {
+            setTimeout(() => {
+                if (typeof renderAdvancedStats === 'function') {
+                    renderAdvancedStats();
+                }
+            }, 500);
+        }
+    }
 }
 
 // ============================================================
