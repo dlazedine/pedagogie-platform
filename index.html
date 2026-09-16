@@ -7985,7 +7985,333 @@ function getInspectorData() {
 function formatDateGeorgian() {
     return new Date().toISOString().split('T')[0];
 }
+// ============================================================
+//  الإحصائيات المتقدمة (للمفتش فقط)
+// ============================================================
+let advCharts = {};
 
+function switchStatsTab(tabName) {
+    document.querySelectorAll('.stats-tab').forEach(t => {
+        t.classList.remove('active', 'btn-info');
+        t.classList.add('btn-outline');
+    });
+    document.querySelectorAll('.stats-tab-content').forEach(c => c.style.display = 'none');
+    
+    const activeTab = document.querySelector(`[data-stats="${tabName}"]`);
+    if (activeTab) {
+        activeTab.classList.add('active', 'btn-info');
+        activeTab.classList.remove('btn-outline');
+    }
+    
+    const tabMap = {
+        'general': 'statsGeneral',
+        'schools': 'statsSchools',
+        'difficulties': 'statsDifficulties',
+        'results': 'statsResults'
+    };
+    
+    const content = document.getElementById(tabMap[tabName]);
+    if (content) content.style.display = 'block';
+    
+    if (tabName === 'schools') renderSchoolsStats();
+    if (tabName === 'difficulties') renderDifficultiesStats();
+    if (tabName === 'results') renderResultsStats();
+}
+
+function renderAdvancedStats() {
+    if (!currentUser || currentUser.role !== 'inspector') return;
+    
+    // إحصائيات عامة
+    const totalSchools = new Set(traitementData.map(d => d.etablissement).filter(Boolean)).size;
+    const totalTeachers = new Set(traitementData.map(d => d.enseignant).filter(Boolean)).size;
+    let totalStudents = 0;
+    let totalDifficulties = 0;
+    
+    traitementData.forEach(item => {
+        const record = studentsRecords[item.id] || {};
+        totalStudents += record.totalStudentsCount || 0;
+        totalDifficulties += (item.criteria || []).length;
+    });
+    
+    const el = (id) => document.getElementById(id);
+    if (el('advTotalSchools')) el('advTotalSchools').textContent = totalSchools;
+    if (el('advTotalTeachers')) el('advTotalTeachers').textContent = totalTeachers;
+    if (el('advTotalStudents')) el('advTotalStudents').textContent = totalStudents;
+    if (el('advTotalDifficulties')) el('advTotalDifficulties').textContent = totalDifficulties;
+    
+    // مخطط توزيع المتعلمين حسب الفئة
+    renderCategoryChart();
+    
+    // مخطط أنماط المعالجة
+    renderTreatmentChart();
+}
+
+function renderCategoryChart() {
+    const canvas = document.getElementById('advChartCategories');
+    if (!canvas) return;
+    
+    if (advCharts.categories) advCharts.categories.destroy();
+    
+    let categC = 0, categD = 0;
+    traitementData.forEach(item => {
+        categC += item.categorieC || 0;
+        categD += item.categorieD || 0;
+    });
+    
+    advCharts.categories = new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+            labels: ['الفئة جـ', 'الفئة د'],
+            datasets: [{
+                data: [categC, categD],
+                backgroundColor: ['#c49b3f', '#b22234'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { size: 14 }, padding: 15 }
+                }
+            }
+        }
+    });
+}
+
+function renderTreatmentChart() {
+    const canvas = document.getElementById('advChartTreatmentTypes');
+    if (!canvas) return;
+    
+    if (advCharts.treatment) advCharts.treatment.destroy();
+    
+    const treatmentTypes = {};
+    traitementData.forEach(item => {
+        const record = studentsRecords[item.id];
+        if (!record) return;
+        const plan = record.plan || {};
+        if (plan.treatmentModes) {
+            treatmentTypes[plan.treatmentModes] = (treatmentTypes[plan.treatmentModes] || 0) + 1;
+        }
+    });
+    
+    const labels = Object.keys(treatmentTypes).slice(0, 6);
+    const values = labels.map(k => treatmentTypes[k]);
+    
+    if (labels.length === 0) {
+        labels.push('لا توجد بيانات');
+        values.push(1);
+    }
+    
+    advCharts.treatment = new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'عدد الحالات',
+                data: values,
+                backgroundColor: '#1a3d6e',
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+        }
+    });
+}
+
+function renderSchoolsStats() {
+    const tbody = document.getElementById('advSchoolsTableBody');
+    const canvas = document.getElementById('advChartSchools');
+    if (!tbody) return;
+    
+    const schoolsData = {};
+    traitementData.forEach(item => {
+        const school = item.etablissement || 'غير محدد';
+        if (!schoolsData[school]) {
+            schoolsData[school] = { count: 0, students: 0, categC: 0, categD: 0 };
+        }
+        schoolsData[school].count++;
+        const record = studentsRecords[item.id] || {};
+        schoolsData[school].students += record.totalStudentsCount || 0;
+        schoolsData[school].categC += item.categorieC || 0;
+        schoolsData[school].categD += item.categorieD || 0;
+    });
+    
+    const sorted = Object.entries(schoolsData).sort((a, b) => b[1].count - a[1].count);
+    
+    tbody.innerHTML = '';
+    sorted.forEach(([school, data], idx) => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${idx + 1}</td>
+                <td><strong>${escapeHtml(school)}</strong></td>
+                <td style="text-align:center;">${data.count}</td>
+                <td style="text-align:center;">${data.students}</td>
+                <td style="text-align:center;">${data.categC}</td>
+                <td style="text-align:center;">${data.categD}</td>
+                <td style="text-align:center;"><strong>${data.categC + data.categD}</strong></td>
+            </tr>
+        `;
+    });
+    
+    if (canvas) {
+        if (advCharts.schools) advCharts.schools.destroy();
+        
+        advCharts.schools = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: sorted.slice(0, 15).map(s => s[0]),
+                datasets: [{
+                    label: 'عدد السجلات',
+                    data: sorted.slice(0, 15).map(s => s[1].count),
+                    backgroundColor: '#167c80',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+}
+
+function renderDifficultiesStats() {
+    const canvas1 = document.getElementById('advChartDifficultyTypes');
+    const canvas2 = document.getElementById('advChartDifficultySources');
+    
+    const types = {};
+    const sources = {};
+    
+    traitementData.forEach(item => {
+        const record = studentsRecords[item.id];
+        if (!record) return;
+        const plan = record.plan || {};
+        
+        if (plan.difficultyType) {
+            types[plan.difficultyType] = (types[plan.difficultyType] || 0) + 1;
+        }
+        if (plan.difficultySource) {
+            sources[plan.difficultySource] = (sources[plan.difficultySource] || 0) + 1;
+        }
+    });
+    
+    if (canvas1) {
+        if (advCharts.diffTypes) advCharts.diffTypes.destroy();
+        advCharts.diffTypes = new Chart(canvas1, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(types).length ? Object.keys(types) : ['لا توجد بيانات'],
+                datasets: [{
+                    data: Object.values(types).length ? Object.values(types) : [1],
+                    backgroundColor: ['#1a3d6e', '#c49b3f', '#b22234', '#167c80', '#17a2b8']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+    
+    if (canvas2) {
+        if (advCharts.diffSources) advCharts.diffSources.destroy();
+        advCharts.diffSources = new Chart(canvas2, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(sources).length ? Object.keys(sources) : ['لا توجد بيانات'],
+                datasets: [{
+                    data: Object.values(sources).length ? Object.values(sources) : [1],
+                    backgroundColor: ['#c49b3f', '#1a3d6e', '#b22234', '#167c80', '#17a2b8']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+}
+
+function renderResultsStats() {
+    const results = JSON.parse(localStorage.getItem('learnerResults') || '[]');
+    
+    const el = (id) => document.getElementById(id);
+    
+    if (results.length === 0) {
+        if (el('advTotalAttempts')) el('advTotalAttempts').textContent = '0';
+        if (el('advAvgScore')) el('advAvgScore').textContent = '0';
+        if (el('advBestScore')) el('advBestScore').textContent = '0';
+        if (el('advWeakScore')) el('advWeakScore').textContent = '0';
+        return;
+    }
+    
+    const totalAttempts = results.length;
+    const avgScore = Math.round(results.reduce((s, r) => s + (r.percent || 0), 0) / totalAttempts);
+    const bestScore = Math.max(...results.map(r => r.percent || 0));
+    const weakScore = Math.min(...results.map(r => r.percent || 0));
+    
+    if (el('advTotalAttempts')) el('advTotalAttempts').textContent = totalAttempts;
+    if (el('advAvgScore')) el('advAvgScore').textContent = avgScore + '٪';
+    if (el('advBestScore')) el('advBestScore').textContent = bestScore + '٪';
+    if (el('advWeakScore')) el('advWeakScore').textContent = weakScore + '٪';
+    
+    // المخطط الزمني
+    const canvas = document.getElementById('advChartResultsTrend');
+    if (!canvas) return;
+    
+    if (advCharts.resultsTrend) advCharts.resultsTrend.destroy();
+    
+    const byDate = {};
+    results.forEach(r => {
+        const d = new Date(r.savedAt).toLocaleDateString('ar-DZ');
+        if (!byDate[d]) byDate[d] = [];
+        byDate[d].push(r.percent || 0);
+    });
+    
+    const dates = Object.keys(byDate);
+    const avgs = dates.map(d => Math.round(byDate[d].reduce((a, b) => a + b, 0) / byDate[d].length));
+    
+    advCharts.resultsTrend = new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'المعدل اليومي',
+                data: avgs,
+                borderColor: '#167c80',
+                backgroundColor: 'rgba(22, 124, 128, 0.1)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
+            }
+        }
+    });
+}
+
+console.log('✅ الإحصائيات المتقدمة v4.3 جاهزة');
 console.log('✅ سجل النتائج v4.2 جاهز');
 // ============================================================
 //  23.19.14. ربط أزرار المراجعة والحفظ والإعادة
