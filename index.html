@@ -3433,71 +3433,105 @@ function applyRolePermissions() {
 }
 
 // ============================================================
-//  8. التهيئة عند تحميل الصفحة
+//  8. التهيئة عند تحميل الصفحة (نسخة مُحصّنة)
 // ============================================================
 document.addEventListener('DOMContentLoaded', async function() {
-    // إضافة أنماط الرسوم المتحركة
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(400px); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
+    console.log('🚀 بدء التهيئة...');
     
-    // تهيئة المستخدمين
-    await initializeUsers();
+    // 1. إضافة أنماط الرسوم المتحركة
+    try {
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        console.log('✅ أنماط الرسوم المتحركة');
+    } catch(e) { console.error('❌ أنماط:', e); }
     
-   // ربط أحداث التنقل (مع حماية من الأخطاء)
-try {
-    setupNavigation();
-    console.log('✅ تم ربط التبويبات');
-} catch(e) {
-    console.error('❌ خطأ في setupNavigation:', e);
-}
+    // 2. تهيئة المستخدمين
+    try {
+        await initializeUsers();
+        console.log('✅ تهيئة المستخدمين');
+    } catch(e) { console.error('❌ المستخدمون:', e); }
     
-    // ربط حقول المفتش
-    setupInspectorFields();
-    
-    // محاولة استعادة الجلسة السابقة
-    const session = loadSession();
-    if (session) {
-        currentUser = session.user;
-        // التحقق من أن المستخدم لا يزال موجوداً
-        const user = getUsers().find(u => u.id === currentUser.id);
-        if (user && user.active) {
-            enterPlatformAfterLogin();
+    // 3. ربط التنقل (الأهم!)
+    try {
+        if (typeof setupNavigation === 'function') {
+            setupNavigation();
+            console.log('✅ ربط التنقل');
         } else {
-            clearSession();
-            currentUser = null;
+            console.error('❌ setupNavigation غير موجودة');
         }
-    }
+    } catch(e) { console.error('❌ التنقل:', e); }
     
-    // إخفاء تلميح المستخدم إن وُجد مستخدمون آخرون
-    const users = getUsers();
-    if (users.length > 1) {
-        document.getElementById('defaultUserHint').style.display = 'none';
-    }
+    // 4. ربط حقول المفتش
+    try {
+        if (typeof setupInspectorFields === 'function') {
+            setupInspectorFields();
+            console.log('✅ حقول المفتش');
+        }
+    } catch(e) { console.error('❌ حقول المفتش:', e); }
     
-    // تحميل الألوان المحفوظة
-    loadSavedColors();
+    // 5. استعادة الجلسة
+    try {
+        const session = loadSession();
+        if (session) {
+            currentUser = session.user;
+            const user = getUsers().find(u => u.id === currentUser.id);
+            if (user && user.active) {
+                enterPlatformAfterLogin();
+                console.log('✅ استعادة الجلسة');
+            } else {
+                clearSession();
+                currentUser = null;
+            }
+        }
+    } catch(e) { console.error('❌ الجلسة:', e); }
     
-    // تحميل شعار التذييل المحفوظ
-    loadCustomFooterLogo();
-// ⚡ حل مشكلة حفظ البيانات — تحميل إجباري عند بدء التطبيق
-console.log('🔄 جاري التحميل الإجباري للبيانات...');
-setTimeout(function() {
-    if (typeof loadAllData === 'function') {
-        loadAllData();
-        console.log('✅ تم تحميل البيانات تلقائياً عند البدء');
-        console.log('   📊 السجلات: ' + (typeof traitementData !== 'undefined' ? traitementData.length : 0));
-    }
-}, 100);
+    // 6. إخفاء تلميح المستخدم
+    try {
+        const users = getUsers();
+        if (users.length > 1) {
+            const hint = document.getElementById('defaultUserHint');
+            if (hint) hint.style.display = 'none';
+        }
+    } catch(e) { console.error('❌ التلميح:', e); }
+    
+    // 7. تحميل الألوان
+    try {
+        if (typeof loadSavedColors === 'function') {
+            loadSavedColors();
+            console.log('✅ الألوان');
+        }
+    } catch(e) { console.error('❌ الألوان:', e); }
+    
+    // 8. تحميل شعار التذييل
+    try {
+        if (typeof loadCustomFooterLogo === 'function') {
+            loadCustomFooterLogo();
+            console.log('✅ شعار التذييل');
+        }
+    } catch(e) { console.error('❌ شعار التذييل:', e); }
+    
+    // 9. تحميل البيانات
+    try {
+        if (typeof loadAllData === 'function') {
+            setTimeout(function() {
+                loadAllData();
+                console.log('✅ تحميل البيانات');
+            }, 100);
+        }
+    } catch(e) { console.error('❌ البيانات:', e); }
+    
+    console.log('🎉 اكتملت التهيئة!');
+});
     // ============================================================
 //  إعادة ربط التبويبات (حل احتياطي)
 // ============================================================
