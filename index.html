@@ -3453,8 +3453,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة المستخدمين
     await initializeUsers();
     
-    // ربط أحداث التنقل
+   // ربط أحداث التنقل (مع حماية من الأخطاء)
+try {
     setupNavigation();
+    console.log('✅ تم ربط التبويبات');
+} catch(e) {
+    console.error('❌ خطأ في setupNavigation:', e);
+}
     
     // ربط حقول المفتش
     setupInspectorFields();
