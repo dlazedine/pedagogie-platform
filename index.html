@@ -1782,6 +1782,250 @@
         .flex-wrap { flex-wrap: wrap; }
         .gap-2 { gap: 10px; }
         .gap-3 { gap: 15px; }
+
+        /* ============================================================
+           ورشة الكتابة والتحرير — نشاط الأساتذة (واجهة فاخرة)
+           ============================================================ */
+        .writing-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: linear-gradient(120deg, var(--primary) 0%, #0f2a4a 100%);
+            border-radius: var(--radius);
+            padding: 30px 36px;
+            color: #fff;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(26,61,110,0.25);
+        }
+        .writing-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 90% -10%, rgba(196,155,63,0.35), transparent 55%);
+            pointer-events: none;
+        }
+        .writing-hero-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .writing-hero-text h1 i { color: var(--gold-light); }
+        .writing-hero-text p {
+            max-width: 640px;
+            font-size: 14px;
+            color: #e3ecf7;
+            line-height: 1.8;
+        }
+        .writing-hero-icon {
+            font-size: 70px;
+            color: var(--gold);
+            opacity: 0.85;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+            flex-shrink: 0;
+        }
+
+        .writing-section-title {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .writing-section-title i { color: var(--gold); }
+
+        .writing-templates { margin-bottom: 26px; }
+        .writing-templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px;
+        }
+        .writing-template-card {
+            background: linear-gradient(160deg, #ffffff 0%, var(--gold-light) 180%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+        .writing-template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px rgba(196,155,63,0.22);
+            border-color: var(--gold);
+        }
+        .writing-template-card .wt-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .writing-template-card h5 { font-size: 14px; color: var(--text-dark); margin-bottom: 6px; }
+        .writing-template-card p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+        .writing-workspace {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .writing-sidebar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px;
+            position: sticky;
+            top: 20px;
+        }
+        .writing-sidebar h4 {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .writing-drafts-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; margin-bottom: 14px; }
+        .writing-draft-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: var(--bg-body);
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .writing-draft-item:hover { border-color: var(--gold); background: var(--gold-light); }
+        .writing-draft-item .wd-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+        .writing-draft-item .wd-del { color: var(--danger); opacity: 0.7; }
+        .writing-draft-item .wd-del:hover { opacity: 1; }
+        .writing-empty-hint { font-size: 12px; color: var(--text-muted); text-align: center; padding: 10px 0; }
+        .writing-new-btn { width: 100%; justify-content: center; }
+
+        .writing-editor-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+        .writing-title-input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            padding: 8px 4px 14px;
+            margin-bottom: 14px;
+            font-family: inherit;
+            background: transparent;
+        }
+        .writing-title-input:focus { outline: none; border-color: var(--gold); }
+
+        .writing-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-body);
+            border-radius: 10px;
+            padding: 8px 10px;
+            margin-bottom: 14px;
+        }
+        .writing-toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-left: 10px;
+            border-left: 1px solid var(--border-color);
+        }
+        .writing-toolbar-group:last-child { border-left: none; }
+        .writing-toolbar button {
+            width: 32px; height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .writing-toolbar button:hover { background: var(--gold-light); color: var(--primary); }
+        .writing-toolbar select, .writing-toolbar input[type="color"] {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 6px;
+            font-size: 12px;
+            font-family: inherit;
+            background: #fff;
+            cursor: pointer;
+        }
+        .writing-toolbar input[type="color"] { width: 34px; height: 30px; padding: 2px; }
+
+        .writing-page-wrap {
+            background: #e7ecf2;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .writing-page {
+            background: #fff;
+            width: 100%;
+            max-width: 760px;
+            min-height: 420px;
+            padding: 46px 52px;
+            border-radius: 4px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+            font-size: 15px;
+            line-height: 2;
+            color: var(--text-dark);
+        }
+        .writing-page:focus { outline: none; }
+        .writing-page:empty::before {
+            content: attr(data-placeholder);
+            color: #b7c2cd;
+        }
+        .writing-page h1, .writing-page h2, .writing-page h3 { color: var(--primary); margin: 14px 0 8px; }
+        .writing-page blockquote {
+            border-right: 3px solid var(--gold);
+            padding: 6px 14px;
+            color: var(--text-muted);
+            background: var(--gold-light);
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .writing-footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .writing-wordcount { font-size: 12px; color: var(--text-muted); }
+        .writing-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        @media (max-width: 900px) {
+            .writing-workspace { grid-template-columns: 1fr; }
+            .writing-sidebar { position: static; }
+            .writing-hero { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -1923,13 +2167,8 @@
             <!-- رسالة الخطأ/النجاح -->
             <div class="login-message" id="loginMessage"></div>
 
-            <!-- تلميح المستخدم الافتراضي (يُخفى عند أول تشغيل إذا لم يكن هناك مستخدمون) -->
-            <div class="user-hint" id="defaultUserHint">
-                <i class="fas fa-info-circle"></i>
-                <strong>الدخول الأول:</strong> استخدم
-                <code>admin</code> كاسم المستخدم و
-                <code>admin123</code> ككلمة مرور، ثم <strong>غيّر كلمة المرور فوراً</strong>.
-            </div>
+            <!-- تلميح إنشاء حساب المدير — يُملأ ديناميكياً فقط عند إنشاء حساب جديد لأول مرة على هذا الجهاز، ولا يحتوي على أي كلمة مرور ثابتة -->
+            <div class="user-hint" id="defaultUserHint" style="display:none;"></div>
 
             <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
@@ -2023,6 +2262,7 @@
             <span class="nav-tab" data-tab="report"><i class="fas fa-file-alt"></i> تقرير الحصيلة</span>
             <span class="nav-tab" data-tab="bank"><i class="fas fa-university"></i> 🏦 بنك المعالجة</span>
             <span class="nav-tab" data-tab="learner"><i class="fas fa-graduation-cap"></i> 🎓 نشاط المتعلم</span>
+            <span class="nav-tab" data-tab="writing"><i class="fas fa-feather-alt"></i> ✍️ ورشة الكتابة والتحرير</span>
             <span class="nav-tab admin-only" data-tab="users"><i class="fas fa-users-cog"></i> 👥 المستخدمون</span>
             <span class="nav-tab admin-only" data-tab="settings"><i class="fas fa-palette"></i> 🎨 التخصيص</span>
         </div>
@@ -2556,6 +2796,92 @@
             </div>
         </div>
 
+        <!-- ========== تبويب: ورشة الكتابة والتحرير (نشاط الأساتذة) ========== -->
+        <div class="tab-content" id="tab-writing">
+            <div class="writing-hero">
+                <div class="writing-hero-text">
+                    <h1><i class="fas fa-feather-alt"></i> ورشة الكتابة والتحرير</h1>
+                    <p>فضاء أنيق للأستاذ لصياغة وتحرير الوثائق البيداغوجية — التقارير، المذكرات، الملاحظات، والمراسلات — بأسلوب احترافي، مع إمكانية الحفظ والطباعة والتصدير.</p>
+                </div>
+                <div class="writing-hero-icon"><i class="fas fa-scroll"></i></div>
+            </div>
+
+            <!-- معرض النماذج الجاهزة -->
+            <div class="writing-templates">
+                <h3 class="writing-section-title"><i class="fas fa-layer-group"></i> نماذج جاهزة</h3>
+                <div class="writing-templates-grid" id="writingTemplatesGrid"></div>
+            </div>
+
+            <div class="writing-workspace">
+                <!-- الشريط الجانبي: المسودات المحفوظة -->
+                <aside class="writing-sidebar">
+                    <h4><i class="fas fa-folder-open"></i> مستنداتي المحفوظة</h4>
+                    <div class="writing-drafts-list" id="writingDraftsList">
+                        <p class="writing-empty-hint">لا توجد مستندات محفوظة بعد.</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm writing-new-btn" onclick="newWritingDocument()">
+                        <i class="fas fa-file-circle-plus"></i> مستند جديد
+                    </button>
+                </aside>
+
+                <!-- محرر النصوص -->
+                <section class="writing-editor-panel">
+                    <input type="text" id="writingDocTitle" class="writing-title-input" placeholder="عنوان المستند...">
+
+                    <div class="writing-toolbar" id="writingToolbar">
+                        <div class="writing-toolbar-group">
+                            <button type="button" title="تراجع" onclick="writingExec('undo')"><i class="fas fa-rotate-left"></i></button>
+                            <button type="button" title="إعادة" onclick="writingExec('redo')"><i class="fas fa-rotate-right"></i></button>
+                        </div>
+                        <div class="writing-toolbar-group">
+                            <select title="نمط الفقرة" onchange="writingExec('formatBlock', this.value); this.selectedIndex=0;">
+                                <option value="">نمط الفقرة</option>
+                                <option value="H1">عنوان كبير</option>
+                                <option value="H2">عنوان متوسط</option>
+                                <option value="H3">عنوان فرعي</option>
+                                <option value="P">فقرة عادية</option>
+                                <option value="BLOCKQUOTE">اقتباس</option>
+                            </select>
+                        </div>
+                        <div class="writing-toolbar-group">
+                            <button type="button" title="عريض" onclick="writingExec('bold')"><i class="fas fa-bold"></i></button>
+                            <button type="button" title="مائل" onclick="writingExec('italic')"><i class="fas fa-italic"></i></button>
+                            <button type="button" title="تسطير" onclick="writingExec('underline')"><i class="fas fa-underline"></i></button>
+                            <button type="button" title="يتوسطه خط" onclick="writingExec('strikeThrough')"><i class="fas fa-strikethrough"></i></button>
+                        </div>
+                        <div class="writing-toolbar-group">
+                            <button type="button" title="محاذاة يمين" onclick="writingExec('justifyRight')"><i class="fas fa-align-right"></i></button>
+                            <button type="button" title="توسيط" onclick="writingExec('justifyCenter')"><i class="fas fa-align-center"></i></button>
+                            <button type="button" title="محاذاة يسار" onclick="writingExec('justifyLeft')"><i class="fas fa-align-left"></i></button>
+                            <button type="button" title="ضبط" onclick="writingExec('justifyFull')"><i class="fas fa-align-justify"></i></button>
+                        </div>
+                        <div class="writing-toolbar-group">
+                            <button type="button" title="قائمة نقطية" onclick="writingExec('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" title="قائمة مرقمة" onclick="writingExec('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+                        </div>
+                        <div class="writing-toolbar-group">
+                            <input type="color" title="لون النص" onchange="writingExec('foreColor', this.value)" value="#17324d">
+                            <button type="button" title="إلغاء التنسيق" onclick="writingExec('removeFormat')"><i class="fas fa-eraser"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="writing-page-wrap">
+                        <div class="writing-page" id="writingEditor" contenteditable="true" spellcheck="true"
+                             data-placeholder="ابدأ الكتابة هنا... أو اختر نموذجاً جاهزاً من الأعلى"></div>
+                    </div>
+
+                    <div class="writing-footer-bar">
+                        <span class="writing-wordcount" id="writingWordCount">0 كلمة</span>
+                        <div class="writing-actions">
+                            <button class="btn btn-outline btn-sm" onclick="printWritingDocument()"><i class="fas fa-print"></i> طباعة</button>
+                            <button class="btn btn-word btn-sm" onclick="exportWritingDocument()"><i class="fas fa-file-word"></i> تصدير Word</button>
+                            <button class="btn btn-success btn-sm" onclick="saveWritingDraft()"><i class="fas fa-save"></i> حفظ المستند</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
         <!-- ========== تبويب 9: إدارة المستخدمين (للمفتش فقط) ========== -->
         <div class="tab-content" id="tab-users">
             <div class="settings-card">
@@ -2952,8 +3278,11 @@ async function initializeUsers() {
         let users = JSON.parse(localStorage.getItem(USERS_KEY) || 'null');
         
         if (!users || !Array.isArray(users) || users.length === 0) {
-            // إنشاء المفتش الافتراضي
-            const adminPasswordHash = await hashPassword('admin123');
+            // ⚡ إصلاح أمني: لا كلمة مرور افتراضية ثابتة بعد الآن (كانت admin123 معروضة دائماً في الواجهة
+            // ويمكن لأي شخص يفتح الرابط على جهاز جديد استعمالها للدخول كمدير، حتى بعد تغييرها على جهاز آخر).
+            // كل جهاز يُنشئ حساب مدير بكلمة مرور عشوائية فريدة تُعرض مرة واحدة فقط عند إنشائه.
+            const randomPassword = generateRandomPassword(10);
+            const adminPasswordHash = await hashPassword(randomPassword);
             users = [{
                 id: 'admin_' + generateId(),
                 username: 'admin',
@@ -2964,11 +3293,13 @@ async function initializeUsers() {
                 passwordHash: adminPasswordHash,
                 createdAt: new Date().toISOString(),
                 lastLogin: null,
-                mustChangePassword: false,
+                mustChangePassword: true,
                 active: true
             }];
             localStorage.setItem(USERS_KEY, JSON.stringify(users));
-            console.log('✅ تم إنشاء حساب المفتش الافتراضي (admin / admin123)');
+            // تُحفظ كلمة المرور في الذاكرة المؤقتة فقط (لعرضها مرة واحدة بعد التحميل) ولا تُخزَّن أبداً بشكل صريح
+            window.__freshAdminPassword = randomPassword;
+            console.log('✅ تم إنشاء حساب مدير جديد على هذا الجهاز بكلمة مرور عشوائية (وليست admin123)');
         }
         
         return users;
@@ -2976,6 +3307,20 @@ async function initializeUsers() {
         console.error('خطأ في تهيئة المستخدمين:', e);
         return [];
     }
+}
+
+// توليد كلمة مرور عشوائية آمنة (بدون رموز ملتبسة مثل 0/O أو 1/l)
+function generateRandomPassword(length = 10) {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+    let pass = '';
+    if (window.crypto && window.crypto.getRandomValues) {
+        const arr = new Uint32Array(length);
+        window.crypto.getRandomValues(arr);
+        for (let i = 0; i < length; i++) pass += chars[arr[i] % chars.length];
+    } else {
+        for (let i = 0; i < length; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return pass;
 }
 
 function getUsers() {
@@ -3138,11 +3483,7 @@ function handleLogout(silent = false) {
     document.getElementById('loginPassword').value = '';
     document.getElementById('loginMessage').classList.remove('show');
     
-    // إظهار تلميح المستخدم الافتراضي إن وُجد
-    const users = getUsers();
-    if (users.length === 1 && users[0].username === 'admin') {
-        document.getElementById('defaultUserHint').style.display = 'block';
-    }
+    // ⚡ لم يعد يُعاد إظهار أي تلميح بكلمة مرور ثابتة عند تسجيل الخروج (كانت ثغرة أمنية)
     
     if (!silent) showToast('تم تسجيل الخروج بنجاح', 'success');
 }
@@ -3180,27 +3521,12 @@ function enterPlatformAfterLogin() {
     updateUserBadge();
     applyRolePermissions();
 
-function loadAllData() {
-    try {
-        traitementData = JSON.parse(localStorage.getItem('traitementData') || '[]');
-        studentsRecords = JSON.parse(localStorage.getItem('studentsRecords') || '{}');
-        
-        renderAll();
-        renderModels();
-        
-        // دوال ستُضاف في الرد 4 — نتحقق من وجودها قبل الاستدعاء
-        if (typeof renderBank === 'function') renderBank();
-        if (typeof populateExerciceSelect === 'function') populateExerciceSelect();
-        if (typeof renderExercices === 'function') renderExercices();
-        
-        console.log('✅ تم تحميل ' + traitementData.length + ' سجل');
-    } catch(e) {
-        console.error('خطأ في تحميل البيانات:', e);
-        traitementData = [];
-        studentsRecords = {};
-        renderAll();
+    // ⚡ إصلاح: استدعاء فعلي لتحميل وعرض البيانات بعد الدخول
+    // (كانت الدالة معرّفة هنا من دون استدعاء، فتبقى الواجهة فارغة/غير مكتملة بعد الدخول)
+    if (typeof loadAllData === 'function') {
+        loadAllData();
     }
-}    
+
     // تشغيل مراقبة الجلسة
     startSessionMonitor();
     
@@ -3314,10 +3640,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
     
-    // إخفاء تلميح المستخدم إن وُجد مستخدمون آخرون
-    const users = getUsers();
-    if (users.length > 1) {
-        document.getElementById('defaultUserHint').style.display = 'none';
+    // ⚡ عرض كلمة مرور المدير مرة واحدة فقط عند إنشاء حساب جديد لأول مرة على هذا الجهاز
+    // (لا تُخزَّن أبداً بشكل صريح، ولا تُعرض ثانية بعد إغلاق هذه الرسالة أو تحديث الصفحة)
+    if (window.__freshAdminPassword) {
+        const hint = document.getElementById('defaultUserHint');
+        if (hint) {
+            hint.innerHTML = `
+                <i class="fas fa-triangle-exclamation"></i>
+                <strong>تم إنشاء حساب مدير جديد على هذا الجهاز.</strong><br>
+                اسم المستخدم: <code>admin</code> &nbsp; كلمة المرور: <code>${escapeHtml(window.__freshAdminPassword)}</code><br>
+                <strong>دوّنها الآن وغيّرها فوراً بعد الدخول — لن تظهر هذه الرسالة مرة أخرى، ولن تعمل هذه الكلمة على أي جهاز آخر.</strong>
+            `;
+            hint.style.display = 'block';
+        }
+        // إزالتها من الذاكرة فوراً بعد التحضير للعرض
+        delete window.__freshAdminPassword;
     }
     
     // تحميل الألوان المحفوظة
@@ -6826,6 +7163,15 @@ function startQuiz(quizId) {
         document.getElementById('quiz-selection-card').style.display = 'none';
         document.getElementById('quiz-taking-area').style.display = 'block';
         document.getElementById('learner-result-card').style.display = 'none';
+
+        // ⚡ إصلاح: إعادة تفعيل زر "حفظ النتيجة" لكل محاولة جديدة
+        // (كان الزر يبقى معطّلاً من المحاولة السابقة فلا يُحفظ أي شيء بعدها إلا بتحديث الصفحة)
+        const saveResultBtn = document.getElementById('learner-save-button');
+        if (saveResultBtn) {
+            saveResultBtn.disabled = false;
+            saveResultBtn.innerHTML = '<i class="fas fa-save"></i> حفظ النتيجة';
+            saveResultBtn.style.background = 'var(--teal)';
+        }
         
         // 8. عرض رأس الاختبار
         const titleEl = document.getElementById('active-quiz-title');
@@ -8281,6 +8627,229 @@ console.log(`
 ║  ⏳ الوظائف الأساسية: في الرد التالي         ║
 ╚══════════════════════════════════════════════╝
 `);
+
+// ============================================================
+//  ورشة الكتابة والتحرير — نشاط الأساتذة
+// ============================================================
+const writingTemplates = [
+    {
+        id: 'report',
+        icon: 'fa-file-signature',
+        name: 'تقرير حصيلة بيداغوجية',
+        desc: 'تقرير منظم لحصيلة المعالجة البيداغوجية لفترة محددة',
+        html: `<h1>تقرير حصيلة بيداغوجية</h1>
+<p><strong>المؤسسة:</strong> ..................... &nbsp;&nbsp; <strong>الفترة:</strong> .....................</p>
+<h2>1. المعطيات العامة</h2>
+<p>اذكر هنا عدد المتعلمين المعنيين، والمستوى الدراسي، والمادة.</p>
+<h2>2. الصعوبات المرصودة</h2>
+<p>عرض موجز لأبرز الصعوبات التي واجهها المتعلمون.</p>
+<h2>3. الإجراءات المتخذة</h2>
+<p>وصف الأنشطة والحلول العلاجية التي طُبّقت.</p>
+<h2>4. النتائج والتوصيات</h2>
+<p>تحليل النتائج المحققة، واقتراح توصيات للمرحلة القادمة.</p>`
+    },
+    {
+        id: 'memo',
+        icon: 'fa-note-sticky',
+        name: 'مذكرة بيداغوجية',
+        desc: 'مذكرة موجهة للفريق التربوي أو الإدارة',
+        html: `<h1>مذكرة بيداغوجية</h1>
+<p><strong>إلى:</strong> ..................... &nbsp;&nbsp; <strong>التاريخ:</strong> .....................</p>
+<p><strong>الموضوع:</strong> .....................</p>
+<blockquote>يشرفني أن أطلعكم على ما يلي...</blockquote>
+<p>اكتب هنا فحوى المذكرة بالتفصيل.</p>
+<p>تقبلوا فائق الاحترام والتقدير.</p>`
+    },
+    {
+        id: 'remark',
+        icon: 'fa-comment-dots',
+        name: 'ملاحظات على إنتاج كتابي',
+        desc: 'نموذج تعليق وتقويم لإنتاج كتابي لمتعلم',
+        html: `<h1>تقويم إنتاج كتابي</h1>
+<p><strong>اسم المتعلم:</strong> ..................... &nbsp;&nbsp; <strong>النشاط:</strong> .....................</p>
+<h2>نقاط القوة</h2>
+<p>...</p>
+<h2>نقاط تحتاج إلى معالجة</h2>
+<p>...</p>
+<h2>توجيهات للتحسين</h2>
+<p>...</p>`
+    },
+    {
+        id: 'letter',
+        icon: 'fa-envelope-open-text',
+        name: 'رسالة إلى أولياء الأمور',
+        desc: 'مراسلة لإعلام الأولياء بمستجدات تربوية',
+        html: `<h1>إلى السادة أولياء الأمور</h1>
+<p>السلام عليكم ورحمة الله وبركاته،</p>
+<p>يسرني أن أُطلعكم على...</p>
+<p style="text-align:left; margin-top:40px;">الأستاذ(ة): .....................</p>`
+    },
+    {
+        id: 'blank',
+        icon: 'fa-file',
+        name: 'صفحة بيضاء',
+        desc: 'ابدأ من الصفر بدون نموذج جاهز',
+        html: ''
+    }
+];
+
+function renderWritingTemplates() {
+    const grid = document.getElementById('writingTemplatesGrid');
+    if (!grid) return;
+    grid.innerHTML = writingTemplates.map(t => `
+        <div class="writing-template-card" onclick="insertWritingTemplate('${t.id}')">
+            <div class="wt-icon"><i class="fas ${t.icon}"></i></div>
+            <h5>${t.name}</h5>
+            <p>${t.desc}</p>
+        </div>
+    `).join('');
+}
+
+function insertWritingTemplate(id) {
+    const tpl = writingTemplates.find(t => t.id === id);
+    if (!tpl) return;
+    const editor = document.getElementById('writingEditor');
+    const titleInput = document.getElementById('writingDocTitle');
+    if (editor.innerHTML.trim() !== '' && !confirm('سيتم استبدال محتوى المحرر الحالي بالنموذج المختار. هل تريد المتابعة؟')) {
+        return;
+    }
+    editor.innerHTML = tpl.html;
+    if (titleInput && !titleInput.value.trim()) titleInput.value = tpl.name;
+    updateWritingWordCount();
+    showToast(`تم إدراج نموذج: ${tpl.name}`, 'success');
+}
+
+function writingExec(cmd, value = null) {
+    document.getElementById('writingEditor').focus();
+    try { document.execCommand(cmd, false, value); } catch (e) { console.warn('writingExec:', e); }
+    updateWritingWordCount();
+}
+
+function updateWritingWordCount() {
+    const editor = document.getElementById('writingEditor');
+    const el = document.getElementById('writingWordCount');
+    if (!editor || !el) return;
+    const text = editor.innerText.trim();
+    const count = text ? text.split(/\s+/).length : 0;
+    el.textContent = `${count} كلمة`;
+}
+
+function newWritingDocument() {
+    const editor = document.getElementById('writingEditor');
+    if (editor.innerHTML.trim() !== '' && !confirm('سيتم إفراغ المحرر لإنشاء مستند جديد. هل تريد المتابعة؟')) return;
+    editor.innerHTML = '';
+    document.getElementById('writingDocTitle').value = '';
+    updateWritingWordCount();
+}
+
+function getWritingStorageKey() {
+    const uid = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.id : 'guest';
+    return `writingDrafts_${uid}`;
+}
+
+function getWritingDrafts() {
+    try {
+        return JSON.parse(localStorage.getItem(getWritingStorageKey()) || '[]');
+    } catch (e) { return []; }
+}
+
+function saveWritingDraft() {
+    const title = document.getElementById('writingDocTitle').value.trim() || 'مستند بدون عنوان';
+    const content = document.getElementById('writingEditor').innerHTML;
+    let drafts = getWritingDrafts();
+
+    let existing = drafts.find(d => d.title === title && d._activeSession);
+    const now = new Date().toISOString();
+
+    if (window.__writingActiveDraftId) {
+        const idx = drafts.findIndex(d => d.id === window.__writingActiveDraftId);
+        if (idx !== -1) {
+            drafts[idx].title = title;
+            drafts[idx].content = content;
+            drafts[idx].updatedAt = now;
+            localStorage.setItem(getWritingStorageKey(), JSON.stringify(drafts));
+            renderWritingDraftsList();
+            showToast('تم تحديث المستند بنجاح', 'success');
+            return;
+        }
+    }
+
+    const newDraft = { id: 'wd_' + Date.now(), title, content, updatedAt: now };
+    drafts.unshift(newDraft);
+    localStorage.setItem(getWritingStorageKey(), JSON.stringify(drafts));
+    window.__writingActiveDraftId = newDraft.id;
+    renderWritingDraftsList();
+    showToast('تم حفظ المستند بنجاح', 'success');
+}
+
+function renderWritingDraftsList() {
+    const list = document.getElementById('writingDraftsList');
+    if (!list) return;
+    const drafts = getWritingDrafts();
+    if (!drafts.length) {
+        list.innerHTML = '<p class="writing-empty-hint">لا توجد مستندات محفوظة بعد.</p>';
+        return;
+    }
+    list.innerHTML = drafts.map(d => `
+        <div class="writing-draft-item" onclick="openWritingDraft('${d.id}')">
+            <span class="wd-name" title="${escapeHtml(d.title)}"><i class="fas fa-file-lines"></i> ${escapeHtml(d.title)}</span>
+            <i class="fas fa-trash wd-del" title="حذف" onclick="event.stopPropagation(); deleteWritingDraft('${d.id}')"></i>
+        </div>
+    `).join('');
+}
+
+function openWritingDraft(id) {
+    const drafts = getWritingDrafts();
+    const draft = drafts.find(d => d.id === id);
+    if (!draft) return;
+    document.getElementById('writingDocTitle').value = draft.title;
+    document.getElementById('writingEditor').innerHTML = draft.content;
+    window.__writingActiveDraftId = draft.id;
+    updateWritingWordCount();
+}
+
+function deleteWritingDraft(id) {
+    if (!confirm('هل أنت متأكد من حذف هذا المستند؟')) return;
+    let drafts = getWritingDrafts().filter(d => d.id !== id);
+    localStorage.setItem(getWritingStorageKey(), JSON.stringify(drafts));
+    if (window.__writingActiveDraftId === id) window.__writingActiveDraftId = null;
+    renderWritingDraftsList();
+    showToast('تم حذف المستند', 'info');
+}
+
+function printWritingDocument() {
+    const title = document.getElementById('writingDocTitle').value.trim() || 'مستند';
+    const content = document.getElementById('writingEditor').innerHTML;
+    const win = window.open('', '_blank');
+    win.document.write(`<html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>${escapeHtml(title)}</title>
+        <style>body{font-family:'Simplified Arabic',Tahoma,Arial;direction:rtl;padding:40px;line-height:2;color:#17324d;}
+        h1,h2,h3{color:#1a3d6e;} blockquote{border-right:3px solid #c49b3f;padding:6px 14px;background:#f5e6c8;border-radius:6px;}</style>
+        </head><body>${content}</body></html>`);
+    win.document.close();
+    win.focus();
+    setTimeout(() => win.print(), 300);
+}
+
+function exportWritingDocument() {
+    const title = document.getElementById('writingDocTitle').value.trim() || 'مستند';
+    const content = document.getElementById('writingEditor').innerHTML;
+    const fullHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font-family:'Simplified Arabic',Arial;direction:rtl;padding:30px;line-height:2;} h1,h2,h3{color:#1a3d6e;} blockquote{border-right:3px solid #c49b3f;padding:6px 14px;background:#f5e6c8;}</style></head><body>${content}</body></html>`;
+    const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${title}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('تم تصدير المستند بصيغة Word', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderWritingTemplates();
+    renderWritingDraftsList();
+    const editor = document.getElementById('writingEditor');
+    if (editor) editor.addEventListener('input', updateWritingWordCount);
+});
 
 // ============================================================
 //  PWA - تسجيل Service Worker
