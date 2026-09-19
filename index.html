@@ -8,6 +8,9 @@
 <!--  PWA - إعدادات التطبيق                                       -->
 <!-- ============================================================ -->
 <link rel="manifest" href="./manifest.json">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="theme-color" content="#1a3d6e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2030,6 +2033,156 @@
 </head>
 <body>
 
+<!-- ============================================================ -->
+<!--  🚨 شاشة الطوارئ — تُظهر فقط إذا كانت هناك نسخة قديمة -->
+<!-- ============================================================ -->
+<div id="emergencyOverlay" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(145deg, #b22234, #8b1a1a);
+    color: #fff;
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    direction: rtl;
+">
+    <div style="background: #fff; color: #17324d; padding: 40px 30px; border-radius: 20px; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+        <div style="font-size: 60px; margin-bottom: 15px;">⚠️</div>
+        <h1 style="color: #b22234; margin: 0 0 15px; font-size: 22px;">يجب تحديث المنصة</h1>
+        <p style="font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
+            يبدو أن المنصة تستخدم نسخة قديمة مخزّنة في متصفحك.<br>
+            لتجنّب الأخطاء، يرجى تحديثها الآن.
+        </p>
+        <p style="font-size: 13px; color: #5d7182; margin-bottom: 25px;">
+            سيؤدي هذا إلى حذف النسخة القديمة وإعادة تحميل المنصة من الخادم.
+        </p>
+        <button onclick="emergencyForceUpdate()" style="
+            background: linear-gradient(145deg, #1a3d6e, #0f2a4a);
+            color: #fff;
+            border: none;
+            padding: 16px 40px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(26,61,110,0.3);
+            font-family: inherit;
+            width: 100%;
+        ">
+            🔄 تحديث المنصة الآن
+        </button>
+        <button onclick="document.getElementById('emergencyOverlay').style.display='none'" style="
+            background: transparent;
+            color: #5d7182;
+            border: 1.5px solid #ced4da;
+            padding: 10px 25px;
+            font-size: 13px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            margin-top: 12px;
+        ">
+            تخطي (غير مُوصى به)
+        </button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  🚨 كشف النسخة القديمة + التحديث القسري
+// ============================================================
+(function detectOldVersion() {
+    // الإصدار الحالي للمنصة — ⚡ حدّثه في كل مرة تعدّل الكود
+    const CURRENT_VERSION = '5.0';
+    const VERSION_KEY = 'pgb_app_version';
+    
+    // اقرأ الإصدار المخزّن
+    const storedVersion = localStorage.getItem(VERSION_KEY);
+    
+    // أول مرة: احفظ الإصدار الحالي
+    if (!storedVersion) {
+        localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+        console.log('✅ أول تشغيل — الإصدار:', CURRENT_VERSION);
+        return;
+    }
+    
+    // إذا اختلف الإصدار → نسخة قديمة!
+    if (storedVersion !== CURRENT_VERSION) {
+        console.warn('⚠️ نسخة قديمة! المخزّن:', storedVersion, '— الحالي:', CURRENT_VERSION);
+        
+        // أظهر شاشة الطوارئ
+        setTimeout(() => {
+            const overlay = document.getElementById('emergencyOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+            }
+        }, 500);
+    }
+})();
+
+// دالة التحديث القسري
+async function emergencyForceUpdate() {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerHTML = '⏳ جاري التحديث...';
+    
+    try {
+        // 1. حذف كل الـ caches
+        if ('caches' in window) {
+            const names = await caches.keys();
+            console.log('🗑️ حذف', names.length, 'cache');
+            await Promise.all(names.map(n => caches.delete(n)));
+        }
+        
+        // 2. إلغاء تسجيل Service Workers
+        if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            console.log('🗑️ إلغاء', regs.length, 'Service Worker');
+            await Promise.all(regs.map(r => r.unregister()));
+        }
+        
+        // 3. حذف الإصدار المخزّن
+        localStorage.removeItem('pgb_app_version');
+        
+        // 4. حذف sessionStorage
+        sessionStorage.clear();
+        
+        // 5. إعادة تحميل مع bypass cache
+        btn.innerHTML = '✅ تم! إعادة التحميل...';
+        
+        setTimeout(() => {
+            // bypassServiceWorker fetch
+            window.location.reload(true);
+        }, 800);
+        
+    } catch(e) {
+        console.error('خطأ:', e);
+        btn.disabled = false;
+        btn.innerHTML = '🔄 حاول مرة أخرى';
+        alert('حدث خطأ. يرجى إغلاق التطبيق وفتحه من جديد.');
+    }
+}
+
+// ============================================================
+//  📢 استقبل رسائل Service Worker
+// ============================================================
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', event => {
+        if (event.data && event.data.type === 'SW_UPDATED') {
+            console.log('🔄 Service Worker تم تحديثه — يُنصح بإعادة التحميل');
+            // لا نعيد التحميل تلقائياً — ننتظر قرار المستخدم
+        }
+        if (event.data && event.data.type === 'CACHE_CLEARED') {
+            console.log('✅ تم حذف كل الـ caches');
+        }
+    });
+}
+</script>
+
 <!-- ============================================================
      زر العودة إلى شاشة الترحيب
      ============================================================ -->
@@ -3093,7 +3246,7 @@
 // ============================================================
 //  1. المتغيرات العامة والثوابت
 // ============================================================
-const APP_VERSION = '4.0';
+const APP_VERSION = '5.0';
 const SESSION_DURATION = 2 * 60 * 60 * 1000; // ساعتان
 const SESSION_KEY = 'pgb_session';
 const USERS_KEY = 'pgb_users';

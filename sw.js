@@ -1,230 +1,135 @@
 // ============================================================
-//  Service Worker — منصة المعالجة البيداغوجية
-//  يوفر العمل بدون إنترنت + تخزين مؤقت ذكي
+//  sw.js — النسخة المُصلحة v5.0
+//  الإصلاحات:
+//  1. Network First لـ HTML → لا نسخ قديمة
+//  2. skipWaiting + clients.claim → تفعيل فوري
+//  3. إصدار جديد → حذف كل الـ caches القديمة
+//  4. عدم تخزين أي شيء فيه كلمات مرور
 // ============================================================
 
-const CACHE_NAME = 'pgb-cache-v4.2';
-const RUNTIME_CACHE = 'pgb-runtime-v4.2';
+const CACHE_VERSION = 'v5.0-' + Date.now(); // ⚡ فريد كل تحميل
+const CACHE_NAME = 'pgb-cache-' + CACHE_VERSION;
+const RUNTIME_CACHE = 'pgb-runtime-' + CACHE_VERSION;
 
-// الملفات الأساسية التي يجب تخزينها دائماً
-const CORE_ASSETS = [
-    './',
-    './index.html',
-    './manifest.json',
-    './images/wizara.png',
-    './images/muqataa.png',
-    './images/icons/icon-192x192.png',
-    './images/icons/icon-512x512.png',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
-    'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
-];
-
-// ============================================================
-//  INSTALL — تثبيت Service Worker
-// ============================================================
 self.addEventListener('install', event => {
-    console.log('[SW] جاري التثبيت...');
-    
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => {
-                console.log('[SW] تخزين الملفات الأساسية');
-                return cache.addAll(CORE_ASSETS.map(url => {
-                    return new Request(url, { mode: 'no-cors' });
-                }));
-            })
-            .then(() => {
-                console.log('[SW] ✅ تم التثبيت');
-                return self.skipWaiting();
-            })
-            .catch(error => {
-                console.error('[SW] ❌ خطأ في التثبيت:', error);
-            })
-    );
+    console.log('[SW v5.0] Installing...');
+    // ⚡ لا ننتظر تخزين أي شيء — تفعيل فوري
+    event.waitUntil(self.skipWaiting());
 });
 
-// ============================================================
-//  ACTIVATE — تنشيط Service Worker
-// ============================================================
 self.addEventListener('activate', event => {
-    console.log('[SW] جاري التنشيط...');
+    console.log('[SW v5.0] Activating...');
     
     event.waitUntil(
-        caches.keys()
-            .then(cacheNames => {
-                return Promise.all(
-                    cacheNames.map(cacheName => {
-                        if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
-                            console.log('[SW] حذف cache قديم:', cacheName);
-                            return caches.delete(cacheName);
-                        }
-                    })
-                );
-            })
-            .then(() => {
-                console.log('[SW] ✅ تم التنشيط');
-                return self.clients.claim();
-            })
+        caches.keys().then(cacheNames => {
+            // ⚡ احذف كل caches القديمة بلا استثناء
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    console.log('[SW] حذف cache:', cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        }).then(() => {
+            console.log('[SW v5.0] ✅ تم التنشيط — كل caches القديمة محذوفة');
+            return self.clients.claim();
+        }).then(() => {
+            // ⚡ أخبر كل التبويبات المفتوحة بإعادة التحميل
+            return self.clients.matchAll({ type: 'window' }).then(clients => {
+                clients.forEach(client => {
+                    client.postMessage({ type: 'SW_UPDATED' });
+                });
+            });
+        })
     );
 });
 
-// ============================================================
-//  FETCH — اعتراض الطلبات
-// ============================================================
 self.addEventListener('fetch', event => {
     const { request } = event;
     const url = new URL(request.url);
     
-    // تجاهل الطلبات غير GET
     if (request.method !== 'GET') return;
-    
-    // تجاهل طلبات Chrome extensions
     if (url.protocol === 'chrome-extension:') return;
     
-    // استراتيجية خاصة للملفات الأساسية: Cache First
-    if (url.pathname.endsWith('.html') || 
-        url.pathname.endsWith('.json') ||
-        url.pathname === '/' ||
-        url.pathname.endsWith('/')) {
-        event.respondWith(cacheFirst(request));
-        return;
-    }
-    
-    // استراتيجية للصور والأيقونات: Cache First
-    if (url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|webp)$/)) {
-        event.respondWith(cacheFirst(request));
-        return;
-    }
-    
-    // استراتيجية للـ CSS والـ JS الخارجية: Stale While Revalidate
-    if (url.pathname.match(/\.(css|js)$/)) {
-        event.respondWith(staleWhileRevalidate(request));
-        return;
-    }
-    
-    // الافتراضي: Network First
+    // ⚡ استراتيجية موحّدة: Network First للجميع
+    // (لا cache للـ HTML → ضمان أحدث نسخة)
     event.respondWith(networkFirst(request));
 });
 
-// ============================================================
-//  استراتيجيات التخزين
-// ============================================================
-
-// Cache First — البحث في Cache أولاً
-async function cacheFirst(request) {
-    try {
-        const cachedResponse = await caches.match(request);
-        if (cachedResponse) {
-            // تحديث Cache في الخلفية
-            fetchAndCache(request).catch(() => {});
-            return cachedResponse;
-        }
-        
-        // إذا لم يوجد في Cache، جلبه من الشبكة
-        const networkResponse = await fetch(request);
-        if (networkResponse && networkResponse.status === 200) {
-            const cache = await caches.open(RUNTIME_CACHE);
-            cache.put(request, networkResponse.clone());
-        }
-        return networkResponse;
-    } catch (error) {
-        // إذا فشل كل شيء، حاول جلب index.html
-        const fallback = await caches.match('./index.html');
-        return fallback || new Response('Offline', { status: 503 });
-    }
-}
-
-// Network First — الشبكة أولاً
 async function networkFirst(request) {
     try {
-        const networkResponse = await fetch(request);
-        if (networkResponse && networkResponse.status === 200) {
+        // ⚡ الشبكة أولاً دائماً
+        const networkResponse = await fetch(request, { cache: 'no-store' });
+        
+        // لا نخزّن HTML/JSON (فيه كلمات مرور محتملة)
+        const url = new URL(request.url);
+        const isHTML = request.destination === 'document' || 
+                       url.pathname.endsWith('.html') ||
+                       url.pathname.endsWith('.json') ||
+                       url.pathname === '/';
+        
+        if (!isHTML && networkResponse && networkResponse.status === 200) {
             const cache = await caches.open(RUNTIME_CACHE);
             cache.put(request, networkResponse.clone());
         }
+        
         return networkResponse;
     } catch (error) {
+        // offline → حاول من cache
         const cachedResponse = await caches.match(request);
         if (cachedResponse) return cachedResponse;
         
-        // fallback لصفحة index.html
-        const fallback = await caches.match('./index.html');
-        return fallback || new Response('Offline', { status: 503 });
-    }
-}
-
-// Stale While Revalidate — Cache + تحديث في الخلفية
-async function staleWhileRevalidate(request) {
-    const cachedResponse = await caches.match(request);
-    
-    const fetchPromise = fetch(request).then(networkResponse => {
-        if (networkResponse && networkResponse.status === 200) {
-            caches.open(RUNTIME_CACHE).then(cache => {
-                cache.put(request, networkResponse.clone());
+        // للـ HTML: صفحة offline بسيطة
+        if (request.destination === 'document') {
+            return new Response(`
+                <!DOCTYPE html>
+                <html dir="rtl" lang="ar">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>غير متصل</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma; display: flex; 
+                               align-items: center; justify-content: center; 
+                               min-height: 100vh; margin: 0; background: #f0f4f8;
+                               text-align: center; padding: 20px; }
+                        .box { background: #fff; padding: 40px; border-radius: 14px;
+                               box-shadow: 0 8px 30px rgba(0,0,0,0.1); max-width: 400px; }
+                        h1 { color: #1a3d6e; margin: 0 0 10px; }
+                        p { color: #5d7182; }
+                        button { background: #1a3d6e; color: #fff; border: none;
+                                 padding: 12px 30px; border-radius: 30px; 
+                                 cursor: pointer; font-size: 15px; margin-top: 20px; 
+                                 font-family: inherit; }
+                    </style>
+                </head>
+                <body>
+                    <div class="box">
+                        <h1>📴 غير متصل</h1>
+                        <p>يرجى الاتصال بالإنترنت لتحميل أحدث نسخة من المنصة.</p>
+                        <button onclick="location.reload()">🔄 إعادة المحاولة</button>
+                    </div>
+                </body>
+                </html>
+            `, {
+                status: 503,
+                headers: { 'Content-Type': 'text/html; charset=utf-8' }
             });
         }
-        return networkResponse;
-    }).catch(() => null);
-    
-    return cachedResponse || fetchPromise;
-}
-
-// جلب في الخلفية وتحديث Cache
-async function fetchAndCache(request) {
-    const response = await fetch(request);
-    if (response && response.status === 200) {
-        const cache = await caches.open(RUNTIME_CACHE);
-        cache.put(request, response.clone());
+        
+        return new Response('Offline', { status: 503 });
     }
-    return response;
 }
 
-// ============================================================
-//  MESSAGE — التواصل مع الصفحة
-// ============================================================
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
-    
     if (event.data && event.data.type === 'CLEAR_CACHE') {
-        caches.keys().then(names => {
-            names.forEach(name => caches.delete(name));
-        });
+        caches.keys().then(names => Promise.all(names.map(n => caches.delete(n))))
+            .then(() => {
+                event.source.postMessage({ type: 'CACHE_CLEARED' });
+            });
     }
 });
 
-// ============================================================
-//  PUSH — الإشعارات (اختياري)
-// ============================================================
-self.addEventListener('push', event => {
-    const options = {
-        body: event.data ? event.data.text() : 'لديك مهمة جديدة',
-        icon: './images/icons/icon-192x192.png',
-        badge: './images/icons/icon-96x96.png',
-        vibrate: [200, 100, 200],
-        dir: 'rtl',
-        lang: 'ar',
-        actions: [
-            { action: 'open', title: 'فتح التطبيق' },
-            { action: 'close', title: 'إغلاق' }
-        ]
-    };
-    
-    event.waitUntil(
-        self.registration.showNotification('منصة المعالجة البيداغوجية', options)
-    );
-});
-
-// النقر على الإشعار
-self.addEventListener('notificationclick', event => {
-    event.notification.close();
-    
-    if (event.action === 'open' || !event.action) {
-        event.waitUntil(
-            clients.openWindow('./')
-        );
-    }
-});
-
-console.log('[SW] ✅ Service Worker جاهز');
+console.log('[SW v5.0] ✅ جاهز — Network First فقط، لا نسخ قديمة');
